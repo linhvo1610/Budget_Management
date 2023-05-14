@@ -13,6 +13,7 @@ export default function App() {
       <Text>van hai push ngay 14</Text>
       <Text>Linh Vo</Text>
       <Text>pat  voahdfaoiufhoqaifhoiqwaefhoi</Text>
+      <Text>Update changes</Text>
       <StatusBar style="auto" />
 
     </View>
