@@ -14,6 +14,7 @@ export default function App() {
       <Text>Linh Vo</Text>
       <Text>pat  voahdfaoiufhoqaifhoiqwaefhoi</Text>
       <Text>Update changes</Text>
+      <Text> em tuan moi push </Text>
       <StatusBar style="auto" />
 
     </View>
