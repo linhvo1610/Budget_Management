@@ -15,6 +15,7 @@ export default function App() {
       <Text>pat  voahdfaoiufhoqaifhoiqwaefhoi</Text>
       <Text>Update changes</Text>
       <Text> em tuan moi push </Text>
+      <Text>Van Hai da push lên cho ae</Text>
       <StatusBar style="auto" />
 
     </View>
