@@ -11,6 +11,7 @@ export default function App() {
       <Text> heloooo</Text>
       <Text>Hehehehe</Text>
       <Text>van hai push ngay 14</Text>
+      <Text>Linh Vo</Text>
       <StatusBar style="auto" />
 
     </View>
