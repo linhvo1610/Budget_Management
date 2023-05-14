@@ -12,6 +12,7 @@ export default function App() {
       <Text>Hehehehe</Text>
       <Text>van hai push ngay 14</Text>
       <Text>Linh Vo</Text>
+      <Text>pat  voahdfaoiufhoqaifhoiqwaefhoi</Text>
       <StatusBar style="auto" />
 
     </View>
