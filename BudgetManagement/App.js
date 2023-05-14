@@ -7,7 +7,8 @@ export default function App() {
       <Text>Bạn Tuấn non vaaađaaaa</Text>
       <Text>acxzx</Text>
       <Text>van hai push</Text>
-      
+      <Text>linhvo</Text>
+      <Text> heloooo</Text>
       <StatusBar style="auto" />
 
     </View>
