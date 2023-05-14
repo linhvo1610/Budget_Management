@@ -10,6 +10,7 @@ export default function App() {
       <Text>linhvo</Text>
       <Text> heloooo</Text>
       <Text>Hehehehe</Text>
+      <Text>van hai push ngay 14</Text>
       <StatusBar style="auto" />
 
     </View>
