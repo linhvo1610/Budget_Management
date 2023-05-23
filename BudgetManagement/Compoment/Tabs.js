@@ -29,6 +29,7 @@ const Tabs = () => {
             tabBarIcon: () =>(
               <Image style={{width:30, height:30,}} resizeMode="stretch" source={require('../assets/Info.png')}/>          )}} />
         </Tab.Navigator>
+        
   
     );
 }

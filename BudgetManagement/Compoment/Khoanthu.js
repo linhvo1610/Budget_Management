@@ -5,6 +5,7 @@ const Khoanthu = () => {
     return (
         <View style={{alignItems:'center'}}>
             <Text>KHoanthu</Text>
+            <Text>KHoanthu</Text>
             
         </View>
     );

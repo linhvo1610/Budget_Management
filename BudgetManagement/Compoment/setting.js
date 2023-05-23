@@ -6,6 +6,8 @@ const Setting = () => {
       
              <View style={{alignItems:'center'}}>
             <Text>Setting</Text>
+           
+            
             
         </View>
        

@@ -77,6 +77,7 @@ const Login = (props) => {
           }
           
         />
+            
             </View>
 
             <View style={{ marginTop: 50, alignItems: 'center', }}>

@@ -5,6 +5,8 @@ const Thongke = () => {
     return (
         <View style={{alignItems:'center'}}>
             <Text>Thoongs kee</Text>
+            <Text>Thoongs kee</Text>
+            
             
         </View>
     );

@@ -20,9 +20,13 @@ const Resgister = (props) => {
                 <Text style={{marginTop:5, marginLeft:10,fontSize:25, fontStyle:'italic',}}>Resgister</Text>
                 <Text style={{marginTop:5, marginLeft:10,fontSize:15, fontStyle:'italic',}}>Welcome back</Text>
             </View>
-            <View style={{marginTop:30,alignItems:'center'}}>
-                <Text>Logo</Text>
-            </View>
+            <Image
+          style={{width:100,height:100, margin:15,}}
+          source={ require('../assets/unnamed.png')
+           
+          }
+          
+        />
             <View style={{marginTop:30,alignItems:'center',  }}>
                 <Text style={{color:'#ffa500', fontSize:25,}}>Spending Management</Text>
             </View>
