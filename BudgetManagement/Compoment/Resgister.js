@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, Text, Image, TouchableHighlight, TextInput} from 'react-native';
+import {View, StyleSheet, Text, Image, TouchableHighlight, TextInput, TouchableOpacity} from 'react-native';
 
 const Resgister = (props) => {
     return (
         <View style={{flex:1,}}>
-            <View>
-                <TouchableHighlight onPress={()=>props.navigation.navigate('Login')}>
+            <View style={{marginTop:30,}}>
+                <TouchableOpacity onPress={()=>props.navigation.navigate('Login')}>
                 <Image
           style={{width:30,height:30, margin:15,}}
           source={ require('../assets/arrow.png')
@@ -13,16 +13,20 @@ const Resgister = (props) => {
           }
           
         />
-                </TouchableHighlight>
+                </TouchableOpacity>
 
             
 
                 <Text style={{marginTop:5, marginLeft:10,fontSize:25, fontStyle:'italic',}}>Resgister</Text>
                 <Text style={{marginTop:5, marginLeft:10,fontSize:15, fontStyle:'italic',}}>Welcome back</Text>
             </View>
-            <View style={{marginTop:30,alignItems:'center'}}>
-                <Text>Logo</Text>
-            </View>
+            <Image
+          style={{width:100,height:100, margin:15,}}
+          source={ require('../assets/unnamed.png')
+           
+          }
+          
+        />
             <View style={{marginTop:30,alignItems:'center',  }}>
                 <Text style={{color:'#ffa500', fontSize:25,}}>Spending Management</Text>
             </View>
