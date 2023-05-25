@@ -10,6 +10,12 @@ import Khoanchi from './Compoment/Khoanchi';
 import Thongke from './Compoment/Thongke';
 import Setting from './Compoment/setting';
 import Tabs from './Compoment/Tabs';
+import AddThu from './ListLoai/AddThu';
+import ListThu from './ListLoai/ListThu';
+import UpdateThu from './ListLoai/UpdateThu';
+import AddChi from './ListLoai/AddChi';
+import ListChi from './ListLoai/ListChi';
+import UpdateChi from './ListLoai/UpdateChi';
 
 
 const Stack = createNativeStackNavigator();
@@ -18,20 +24,24 @@ export default function App() {
 
   return (
     <NavigationContainer>
-          <Stack.Navigator screenOptions={{headerShown:false}}  initialRouteName='Login'>
-            <Stack.Screen name='Login' component={Login} options={ {title:'Login'}} />
-            <Stack.Screen name='Res' component={Resgister} options={ {title:'Res'}} />
-            <Stack.Screen name='Tab' component={Tabs} options={ {title:'Tab'}} />
-          
-            <Stack.Screen name='Khoanthu' component={Khoanthu} options={ {title:'Khoanthu'}} />
-            <Stack.Screen name='Khoanchi' component={Khoanchi} options={ {title:'Khoanchi'}} />
-            <Stack.Screen name='Thongke' component={Thongke} options={ {title:'Thongke'}} />
-            <Stack.Screen name='Setting' component={Setting} options={ {title:'Setting'}} />
-            
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Login'>
+        <Stack.Screen name='Login' component={Login} options={{ title: 'Login' }} />
+        <Stack.Screen name='Res' component={Resgister} options={{ title: 'Res' }} />
+        <Stack.Screen name='Tab' component={Tabs} options={{ title: 'Tab' }} />
 
-	
-          </Stack.Navigator>
-      </NavigationContainer>
+        <Stack.Screen name='Khoanthu' component={Khoanthu} options={{ title: 'Khoanthu' }} />
+        <Stack.Screen name='Khoanchi' component={Khoanchi} options={{ title: 'Khoanchi' }} />
+        <Stack.Screen name='Thongke' component={Thongke} options={{ title: 'Thongke' }} />
+        <Stack.Screen name='Home' component={Tabs} options={{ title: 'Home' }} />
+        <Stack.Screen name='AddThu' component={AddThu} options={{ title: 'Them loai thu' }} />
+        <Stack.Screen name='UpdateThu' component={UpdateThu} options={{ title: 'Danh sach loai thu' }} />
+        <Stack.Screen name='ListThu' component={ListThu} options={{ title: 'Update loai thu' }} />
+        <Stack.Screen name='AddChi' component={AddChi} options={{ title: 'Them loai chi' }} />
+        <Stack.Screen name='UpdateChi' component={UpdateChi} options={{ title: 'Danh sach loai chi' }} />
+        <Stack.Screen name='ListChi' component={ListChi} options={{ title: 'Update loai chi' }} />
+
+      </Stack.Navigator>
+    </NavigationContainer>
 
   );
 }

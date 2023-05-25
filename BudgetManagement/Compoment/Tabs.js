@@ -4,19 +4,24 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Khoanthu from './Khoanthu';
 import Khoanchi from './Khoanchi';
 import Thongke from './Thongke';
-import Setting from './setting';
+import Home from './Home';
+import ListThu from '../ListLoai/ListThu';
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
     return (
         <Tab.Navigator  screenOptions={{headerShown:false}}
         >
-          <Tab.Screen name="Khoanthu" component={Khoanthu} options={{
+        <Tab.Screen name="Home" component={Home}
+          options={{
+            tabBarIcon: () =>(
+              <Image style={{width:30, height:30,}} resizeMode="stretch" source={require('../assets/Info.png')}/>          )}} />
+          <Tab.Screen name="Khoanthu" component={Khoanthu} 
+          options={{
             tabBarIcon: () =>(
               <Image style={{width:30, height:30,}} resizeMode="stretch" source={require('../assets/khoanthu.png')}/>          )}}         />
-         
-         
-          <Tab.Screen name="Khoanchi" component={Khoanchi} options={{
+          <Tab.Screen name="Khoanchi" component={Khoanchi} 
+          options={{
             tabBarIcon: () =>(
               <Image style={{width:30, height:30,}} resizeMode="stretch" source={require('../assets/Khoanchi.png')}/>          )}} />
           <Tab.Screen name="Thongke" component={Thongke}
@@ -24,10 +29,7 @@ const Tabs = () => {
             tabBarIcon: () =>(
               <Image style={{width:30, height:30,}} resizeMode="stretch" source={require('../assets/Thongke.png')}/>          )}} />
 
-               <Tab.Screen name="Setting" component={Setting}
-          options={{
-            tabBarIcon: () =>(
-              <Image style={{width:30, height:30,}} resizeMode="stretch" source={require('../assets/Info.png')}/>          )}} />
+               
         </Tab.Navigator>
         
   
