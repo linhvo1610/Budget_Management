@@ -7,7 +7,8 @@ import Home from '../Compoment/Home';
 
 
 const ListThu = (props) => {
-    var url = "https://63dc9b8a2308e3e319ea7194.mockapi.io/sanpham/listThu"
+    // var url = "https://63dc9b8a2308e3e319ea7194.mockapi.io/sanpham/listThu"
+    var url= "http://192.168.1.6:3000/tb_loaiThu";
     const [listcontact, setlistcontact] = useState([])
     const [reloading, setreloading] = useState(false)
 
@@ -74,17 +75,6 @@ const ListThu = (props) => {
                         >{item.title}</Text>
 
 
-                        <View style={{ flexDirection: 'row', alignSelf: 'center', marginLeft: 110 }}>
-                            <TouchableOpacity onPress={handleDelete}>
-                                <Image source={require('../assets/delete.jpg')}
-                                    style={{ width: 20, height: 22, marginRight: 8 }}></Image>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={chuyentrangEdit}>
-                                <Image source={require('../assets/edit.png')}
-                                    style={{ width: 20, height: 22 }}></Image>
-                            </TouchableOpacity>
-                        </View>
-
                     </TouchableOpacity>
                     <TouchableOpacity style={{ marginLeft: 55, }}>
                         <Text >{item.quantity}</Text>
@@ -139,10 +129,7 @@ const ListThu = (props) => {
             <Text style={{fontSize: 20, color: 'blue', backgroundColor: 'white',marginRight:90}}>
                 Quản lý loại thu chi</Text>
         </View>
-            <TouchableOpacity onPress={chuyenAdd}>
-                <Image source={require('../assets/add.png')}
-                    style={{ width: 40, height: 40, resizeMode: 'contain', alignSelf: 'flex-end', marginRight: 20, }}></Image>
-            </TouchableOpacity>
+
 
             <FlatList
                 data={listcontact}
