@@ -87,7 +87,7 @@ const UpdateChi = ( {route,navigation} ) => {
             style={{ width: 240, height: 160,alignSelf:'center', marginTop:15 }} />}
 
                 <View style={{ alignSelf: 'center', marginTop: 15, }}>
-                    <Text style={styles.save} onPress={update}> Update </Text>
+                    <Text style={styles.save} onPress={()=>update(id)}> Update </Text>
                 </View>
             </View>
 

@@ -5,7 +5,8 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
 const AddChi = ({ navigation, route }) => {
-    var url = "https://63dc9b8a2308e3e319ea7194.mockapi.io/sanpham/listSpending"
+    // var url = "https://63dc9b8a2308e3e319ea7194.mockapi.io/sanpham/listSpending"
+    var url =""
     const [image, setimage] = useState('');
     const [title, settitle] = useState('');
     const [quantity, setquantity] = useState();
