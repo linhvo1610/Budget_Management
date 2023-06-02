@@ -23,7 +23,9 @@ const Login = (props) => {
             alert("Chưa nhập password")
             return;
         }
-        fetch('http://192.168.1.6:8000/api/users?username='+username)
+
+        fetch('http://192.168.0.101:8000/api/users?username='+username)
+
             .then((response) => 
                 response.json())
             .then(async (json) => {
