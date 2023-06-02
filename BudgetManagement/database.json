@@ -1,0 +1,36 @@
+{
+  "td_loaiChi": [
+    {
+      "image": "https://tse2.mm.bing.net/th?id=OIP.1UBKy4Ms6ki_cJJcKvDKVQHaEK&pid=Api&P=0&h=180",
+      "title": "Do an",
+      "quantity": "5",
+      "id": 1
+    },
+    {
+      "image": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FBudgetManagement-c9a990bf-cd98-4e5f-80b9-26c069926cbd/ImagePicker/16a6b7de-7c98-413c-bd64-4951fa7310d5.jpeg",
+      "title": "Binh nuoc",
+      "quantity": "2",
+      "id": 2
+    }
+  ],
+  "tb_loaiThu": [
+    {
+      "title": "Quần áo",
+      "quantity": "12",
+      "image": "https://tse2.mm.bing.net/th?id=OIP.kfJaoeDwHa9rUGnfE89DbQHaG3&pid=Api&P=0&h=180",
+      "id": 1
+    },
+    {
+      "title": "Nước",
+      "quantity": "2",
+      "image": "https://tse4.mm.bing.net/th?id=OIP.AjEgIBE1bj7TzZk9hIp99gAAAA&pid=Api&P=0&h=180",
+      "id": 2
+    },
+    {
+      "title": "MoMo",
+      "quantity": "5",
+      "image": "https://tse2.mm.bing.net/th?id=OIP.Dp-ELapY8yRT4zO-eVywVQAAAA&pid=Api&P=0&h=180",
+      "id": 4
+    }
+  ]
+}
