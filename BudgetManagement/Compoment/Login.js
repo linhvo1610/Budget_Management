@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableHighlight, Image } from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableHighlight, Image,TouchableOpacity, Button } from 'react-native';
 import { API } from './API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
+
 
 
 
@@ -23,7 +24,7 @@ const Login = (props) => {
             alert("Chưa nhập password")
             return;
         }
-        fetch('http://192.168.1.6:8000/api/users?username='+username)
+        fetch('http://192.168.102.12:8000/api/users?username='+username)
             .then((response) => 
                 response.json())
             .then(async (json) => {
@@ -88,10 +89,11 @@ const Login = (props) => {
             </View>
             <View style={{ alignItems: 'center' }}>
 
-                <TouchableHighlight style={{ marginTop: 20, marginBottom: 10, width: 250, backgroundColor: '#ff8c00', height: 30, borderRadius: 10, }}>
-                    <Text style={{ textAlign: 'center', marginTop: 5, color: 'white', fontWeight: 'bold' }} onPress={() => dologin()}  >LOGIN</Text>
+                <TouchableOpacity style={{ marginTop: 20, marginBottom: 10, width: 250, backgroundColor: '#ff8c00', height: 30, borderRadius: 10, }}>
+                    <Text style={{ textAlign: 'center', marginTop: 5, color: 'white', fontWeight: 'bold' }} onPress={() => dologin()} >LOGIN</Text>
 
-                </TouchableHighlight>
+                </TouchableOpacity>
+                <Button  onPress={ dologin}  title='Login'></Button>
             </View>
             <View style={{ marginTop: 15, alignItems: 'center' }}>
 
