@@ -24,26 +24,25 @@ const Login = (props) => {
             alert("Chưa nhập password")
             return;
         }
-        fetch('http://192.168.102.12:8000/api/users?username='+username)
+        fetch(API.login+username)
             .then((response) => 
                 response.json())
             .then(async (json) => {
 
-                setdata(json.data);
-
-                if (data.length != 1) {
+                console.log(json.data);
+                if (json.data.length != 1) {
                     alert("Tài Khoản hoặc mật khẩu sai");
                     return;
                 } else {
-                    let objU = data[0];
+                    let objU = json.data[0];
                     console.log(objU);
                     if (objU.password == password && objU.role == "User") {
                         try {
                             await AsyncStorage.setItem("login", JSON.stringify(objU));
                             console.log(objU);
                             alert('đăng nhập thành công')
-                            setusername("")
-                            setpassword("")
+                            // setusername("")
+                            // setpassword("")
                             props.navigation.navigate("Tab");
                             // }
                         } catch (e) {
@@ -93,15 +92,16 @@ const Login = (props) => {
                     <Text style={{ textAlign: 'center', marginTop: 5, color: 'white', fontWeight: 'bold' }} onPress={() => dologin()} >LOGIN</Text>
 
                 </TouchableOpacity>
-                <Button  onPress={ dologin}  title='Login'></Button>
+               
             </View>
             <View style={{ marginTop: 15, alignItems: 'center' }}>
 
-                <TouchableHighlight style={{ marginTop: 20, marginBottom: 10, width: 400 }}>
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold' }}  >You don't have an account?
-                        <Text style={{ marginLeft: 5, color: '#ff8c00' }} onPress={() => props.navigation.navigate("Res")} >Singup</Text>
+                <TouchableHighlight style={{ marginTop: 20, marginBottom: 10, width: '100%' }}>
+                    <View style={{alignContent:'center',textAlign: 'center', fontWeight: 'bold',flexDirection:'row'}} >
+                        <Text style={{marginRight:5}}>You don't have an account?</Text>
+                        <Text style={{ color: '#ff8c00' }} onPress={() => props.navigation.navigate("Res")} >Sign-up</Text>
 
-                    </Text>
+                    </View>
 
                 </TouchableHighlight>
 
