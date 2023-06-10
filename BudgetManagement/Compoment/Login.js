@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 
 
+
 const Login = (props) => {
     const [username, setusername] = useState('');
     const [password, setpassword] = useState('');
@@ -24,7 +25,7 @@ const Login = (props) => {
             return;
         }
 
-        fetch('http://192.168.0.101:8000/api/users?username='+username)
+        fetch('http://192.168.1.8:8000/api/users?username='+username)
 
             .then((response) => 
                 response.json())

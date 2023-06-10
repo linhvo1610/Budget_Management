@@ -4,6 +4,7 @@ import { Switch } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
+
 const AddThu = ({ navigation, route }) => {
     var url = "https://63dc9b8a2308e3e319ea7194.mockapi.io/sanpham/listThu"
     const [image, setimage] = useState('');
