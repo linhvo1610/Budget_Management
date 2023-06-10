@@ -1,6 +1,8 @@
 import {StyleSheet , View, Text,Image,ScrollView, Dimensions,TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { Component, useState } from 'react'
+import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const images = [
@@ -9,6 +11,7 @@ const images = [
     'https://tse3.mm.bing.net/th?id=OIP.yKmq1Utmjq1e4kG8zWnklQHaEK&pid=Api&P=0&h=180',
     'https://tse3.mm.bing.net/th?id=OIP.99y-tyFEvNeUWaoOr9kCGAHaD4&pid=Api&P=0&h=180',
 ]
+
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -25,12 +28,41 @@ const Home = ({navigation}) => {
         }
     }
 
+
+    const [information, setinformation] = useState({});
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const value = await AsyncStorage.getItem("login")
+                console.log(value);
+                if (value !== null) {
+                    let parsed = JSON.parse(value)
+                    setinformation(parsed);
+                    console.log(information.username);
+                }
+            } catch (e) {
+                // error reading value
+                console.log(e);
+            }}
+        getData();
+      
+        return () => {
+        }
+    }, [])
+
+    const chuyentr = () => {
+        navigation.navigate('Information');
+    }
+    
+
+
     return(
         <View>
-        
         <View style={styles.ngang}>
-        <Image style={styles.img} source={require( '../assets/icon.png' )} />
-        <Text style={{fontSize:25,fontWeight:'bold',marginTop:20}}> Hai Nguyen </Text>
+        <TouchableOpacity onPress={chuyentr}>
+        <Image style={styles.img} source={require( '../assets/meme.jpg' )} />
+        </TouchableOpacity>
+        <Text style={{fontSize:25,fontWeight:'bold',marginTop:20,color:'black'}}> {information.username} </Text>
         </View>
         
         <View>
