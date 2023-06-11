@@ -66,7 +66,6 @@ const Home = ({ navigation }) => {
     const getBalance = () => {
         fetch(API.getbalance + information._id)
             .then((response) => {
-                // convert to json
                 return response.json();
             })
             .then(async (data_json) => {
@@ -143,36 +142,15 @@ const Home = ({ navigation }) => {
 
     return (
         <View>
-            <View style={styles.ngang}>
-                <TouchableOpacity onPress={chuyentr}>
-                    <Image style={styles.img} source={require('../assets/meme.jpg')} />
-                </TouchableOpacity>
-                <Text style={{ fontSize: 25, fontWeight: 'bold', marginTop: 20, color: 'black' }}> Welcome, {information.username} </Text>
-            </View>
+            <View style={{backgroundColor:'#58fcf2',borderBottomLeftRadius:8,borderBottomRightRadius:8,elevation:2}}>
+                <View style={styles.ngang}>
+                    <TouchableOpacity onPress={chuyentr}>
+                        <Image style={styles.img} source={require('../assets/meme.jpg')} />
+                    </TouchableOpacity>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold', marginTop: 20, color: 'black' }}> Welcome, {information.username} </Text>
 
-
-            <View>
-                <SafeAreaView style={styles.container}>
-                    <View style={styles.wrap}>
-                        <ScrollView onScroll={({ nativeEvent }) => onchange(nativeEvent)}
-                            showsHorizontalScrollIndicator={false}
-                            pagingEnabled
-                            horizontal
-                            style={styles.wrap}
-                        >
-                            {/* {
-            images.map((e, index)=> 
-            <Image key={e}
-            resizeMode='stretch'
-            style={styles.wrap}
-            source={{uri : e}} />
-            )
-        } */}
-
-                        </ScrollView>
-
-
-                        <View style={styles.balance}>
+                </View>
+                <View style={styles.balance}>
                             <View  >
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
                                     <Text style={{ margin: 8, fontSize: 17, fontWeight: 'bold' }}>VÍ CỦA TÔI</Text>
@@ -194,63 +172,13 @@ const Home = ({ navigation }) => {
 
 
                         </View>
-
-
-                        {/* <View style={styles.wrapDot}>
-                            {
-                                images.map((e, index) =>
-                                    <Text ket={e} style={imgActive == index ? styles.doActive : styles.dot}>
-                                        •
-                                    </Text>
-                                )
-                            }
-                        </View> */}
-                    </View>
-                </SafeAreaView>
+            </View>
+            <View>
+                
             </View>
 
-            {/* <View style={{ marginTop: 70, width: 250, alignSelf: 'center' }}>
-                <View style={styles.item0}>
-                    <View style={{ marginLeft: 20, }} >
-                        <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 24, }} > Quản lý chi tiêu </Text>
-                    </View>
-                </View>
-            </View>
 
-            <View style={{ marginTop: 20 }}>
-                <View style={styles.item1}>
-                    <View >
-                        <TouchableOpacity>
-                            <Image source={require('../assets/khoanthu.png')} style={{
-                                width: 70, height: 70, borderRadius: 20, marginLeft: 10
-                            }} />
-                        </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity style={{ marginLeft: 20, }}
-
-                    >
-                        <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18, }}
-                            onPress={() => { navigation.navigate('ListThu') }} > Danh sách loại thu </Text>
-                    </TouchableOpacity>
-
-                </View>
-            </View>
-            <View style={{ marginTop: 0 }}>
-                <View style={styles.item1}>
-                    <View >
-                        <TouchableOpacity>
-                            <Image source={require('../assets/Khoanchi.png')} style={{
-                                width: 70, height: 70, borderRadius: 20, marginLeft: 10
-                            }} />
-                        </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity style={{ marginLeft: 20, }} >
-                        <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18, }}
-                            onPress={() => { navigation.navigate('ListChi') }} > Danh sách loại chi </Text>
-                    </TouchableOpacity>
-
-                </View>
-            </View> */}
+          
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -301,7 +229,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 10,
         justifyContent: 'center',
     },
     ngang: {
@@ -359,7 +287,8 @@ const styles = StyleSheet.create({
         width: '70%',
         marginLeft: 80,
         height: 80,
-        borderRadius: 10
+        borderRadius: 10,
+        marginBottom:15
     },
     centeredView: {
         flex: 1,

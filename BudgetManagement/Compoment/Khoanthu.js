@@ -1,120 +1,163 @@
 import { Modal, Button, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlatList, RefreshControl, ScrollView } from 'react-native-gesture-handler'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import { ActivityIndicator } from 'react-native';
+
+import { API } from './API';
+
 
 const Khoanthu = (props) => {
+    var dem = 0;
+    const [listcontact, setlistcontact] = useState([])
+    const [reloading, setreloading] = useState(false)
+    const [balance, setbalance] = useState(0)
+    const [title, settitle] = useState("")
+    const [price, setprice] = useState(0)
+    const [date, setdate] = useState('')
+    const [description, setdescription] = useState('')
+    const [information, setinformation] = useState({})
+    const [isLoading, setisLoading] = useState(true);
+    const [counter, setcounter] = useState(dem);
+    const [data, setdata] = useState();
+    const reloadData = React.useCallback(() => {
+        setreloading(true); // set trạng thái bắt đầu reload
+        dem++;
+        getRecord();
+        setcounter(dem);
+        
 
-        // var url = "https://63dc9b8a2308e3e319ea7194.mockapi.io/sanpham/listSpending"
-        var url ="http://192.168.1.8:3000/tb_khoanthu"
-        const [listcontact, setlistcontact] = useState([])
-        const [reloading, setreloading] = useState(false)
-    
-        const [title, setphone] = useState("")
-        const [price, setprice] = useState(0)
-        const [date, setdate] = useState('')
-        const [note, setnote] = useState('')
-    
+    });
+
+    useEffect(() => {
         const getData = async () => {
             try {
-                const response = await fetch(url); //lấy dữ liệu về 
-                const jsonSP = await response.json(); // chuyển dũ liêu thành đt json
-                console.log(jsonSP);
-                setlistcontact(jsonSP);
-    
-            } catch (error) {
-                console.error(error);
-            } finally {
+                const value = await AsyncStorage.getItem("balance")
+                console.log(value);
+                if (value !== null) {
+                    let parsed = JSON.parse(value)
+                    setbalance(parsed);
+                    console.log(balance.balance);
+                }
+            } catch (e) {
+                // error reading value
+                console.log(e);
             }
         }
-    
-        const renderContact = ({ item }) => {
-    
-    
-            return (
-                <View>
-                    <View style={styles.item}>
-    
-                        <TouchableOpacity style={{ marginLeft: 20, width: 200, }} >
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 18, }}
-                            >{item.title}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{ marginLeft: 20, width: 200, }} >
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 18, }}
-                            >{item.price}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{ marginLeft: 20, width: 200, }} >
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 18, }}
-                            >{item.date}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{ marginLeft: 20, width: 200, }} >
-                            <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 18, }}
-                            >{item.note}</Text>
-                        </TouchableOpacity>
-    
-                    </View>
-                </View>
-    
-            )
+        const getDataLogin = async () => {
+            try {
+                const value = await AsyncStorage.getItem("login")
+                console.log(value);
+                if (value !== null) {
+                    let parsed = JSON.parse(value)
+                    setinformation(parsed);
+                    console.log(information._id);
+                }
+            } catch (e) {
+                // error reading value
+                console.log(e);
+            }
         }
-    
-        const reloadData = React.useCallback(() => {
-            // xử lý công việc load lại dữ liệu đổ vào danh sách
-            setreloading(true); // set trạng thái bắt đầu reload
-            getData();
-            // mô phỏng đợi reload, nếu là reload từ server thật thì không cần viết lệnh dưới
-            setTimeout(() => {
-                setreloading(false); // sau 2s thì đổi trạng thái không rload nữa
-            }, 2000);
-    
-    
-        });
-    
-        React.useEffect(() => {
-            const unsubscribe = props.navigation.addListener('focus', () => {
-                // do something
-                getData();
-                // getDataComment(); 
-            });
-            return unsubscribe;
-        }, [props.navigation]);
-    
-        const chuyenAdd = () => {
-            props.navigation.navigate('AddKhoanthu');
-        }
-        const quoaylai = () => {
-            props.navigation.navigate('Home');
-        }
-    
-    
-        return (
-            <View style={{ flex: 1 }}>
-    
-            <View style={{flexDirection:'row',marginTop:60,
-                justifyContent: 'center', alignItems: 'center', textAlign: "center",
-                fontSize: 20, color: 'blue', backgroundColor: 'white', margin: 10, padding: 5, borderRadius: 20, elevation: 10
-            }}>
+        getData();
+        getDataLogin();
+        getRecord();
 
-                <Text style={{fontSize: 20, color: 'blue', backgroundColor: 'white',alignSelf:'center'}}>
-                    Quản lý loại thu chi</Text>
-            </View>
-            <TouchableOpacity onPress={chuyenAdd} >
-            <Image source={require('../assets/add.png')}
-                style={{ width: 40, height: 40, resizeMode: 'contain',alignSelf:'flex-end',marginRight:30 }}></Image>
-        </TouchableOpacity>
-    
-    
-                <FlatList
-                    data={listcontact}
-                    keyExtractor={item => item.id}
-                    refreshControl={
-                        <RefreshControl refreshing={reloading} onRefresh={reloadData} />
-                    }
-                    renderItem={renderContact}
-                >
-                </FlatList>
-            </View>
-        )
+        return () => {
+        }
+    }, [])
+    const getRecord = () => {
+        fetch(API.getrecord + information._id)
+            .then((response) => {
+                return response.json();
+            })
+            .then(async (data_json) => {
+                setdata(data_json);
+                settitle(data.title);
+                setprice(data.price);
+                setdescription(data.description);
+                console.log(title);
+              
+            }).finally(() => setisLoading(false));
     }
+
+    
+
+
+
+
+    const chuyenAdd = () => {
+        props.navigation.navigate('AddKhoanthu');
+    }
+    const quoaylai = () => {
+        props.navigation.navigate('Home');
+    }
+    return (
+        <View style={{ flex: 1 }}>
+
+            <Text>Số Dư: {balance.balance}</Text>
+            <TouchableOpacity onPress={chuyenAdd} >
+                <Image source={require('../assets/add.png')}
+                    style={{ width: 40, height: 40, resizeMode: 'contain', alignSelf: 'flex-end', marginRight: 30 }}></Image>
+            </TouchableOpacity>
+
+            <View style={{ width: "100%", height: 350 }}>
+               <FlatList>
+               <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, borderRadius: 8, padding: 10 }}>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={{
+                        marginBottom: 10,
+                        fontWeight: 'bold',
+                        color: '#d63341',
+                        fontSize: 15,
+                        marginLeft: 8,
+                        marginTop: 2,
+                        flex: 8
+
+                    }} > {title}</Text>
+
+                </View>
+
+
+             
+
+
+                <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
+                    <Text style={{ marginBottom: 5 }} > {price}</Text>
+
+
+                </View>
+                <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
+                    <Text style={{ marginBottom: 5 }} > {description}</Text>
+
+
+                </View>
+                <View style={{ flexDirection: 'row', borderBottomWidth: 0.5, marginBottom: 10, marginTop: 10 }}>
+                </View>
+
+
+
+
+
+            </View>
+               </FlatList>
+
+            </View>
+
+
+           
+            <View style={{
+                position: 'absolute',
+                bottom: 0,
+            }}>
+                <TouchableOpacity>
+                    <IonIcon name='add-circle'
+                    size={20}></IonIcon>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+}
 
 export default Khoanthu
 
@@ -167,26 +210,26 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         fontSize: 17,
     },
-    centerredView:{
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center',
-        marginTop:22,
+    centerredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
     },
-    modalView:{
-        margin:20,
-        backgroundColor:'white',
-        borderRadius:20,
-        width:'90%',
-        padding:35,
-        alignItems:'center',
-        shadowColor:'#000',
-        shadowOffset:{
-            width:0,
-            height:2,
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        width: '90%',
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
         },
-        shadowOpacity:0.25,
-        shadowRadius:4,
-        elevation:5,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     }
 })
