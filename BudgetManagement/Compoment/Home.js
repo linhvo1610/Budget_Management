@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { API } from './API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput } from "react-native-gesture-handler";
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const images = [
     'https://tse3.mm.bing.net/th?id=OIP.i0EhYlhSgyDXcbRqzcqz4AHaEy&pid=Api&P=0&h=180',
@@ -70,7 +70,6 @@ const Home = ({ navigation }) => {
                 return response.json();
             })
             .then(async (data_json) => {
-                setdata(data_json);
                 let objB = data_json.data[0];
                 console.log(objB);
                 try {
@@ -174,10 +173,28 @@ const Home = ({ navigation }) => {
 
 
                         <View style={styles.balance}>
-                            <Text>Số dư: {balance}</Text>
+                            <View  >
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
+                                    <Text style={{ margin: 8, fontSize: 17, fontWeight: 'bold' }}>VÍ CỦA TÔI</Text>
+                                    {balance == 0 ? <TouchableOpacity onPress={() => setModalVisible(true)} style={{ margin: 8 }}>
+                                        <Icon name="plus"
+                                            size={20}></Icon>
+                                    </TouchableOpacity> : <TouchableOpacity onPress={() => setupdateModalVisible(true)} style={{ margin: 8 }}>
+                                        <Icon name="plus"
+                                            size={20}></Icon>
+                                    </TouchableOpacity>}
+
+                                </View>
+                                <View style={{ borderBottomWidth: 0.5, opacity: 0.5 }}></View>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                                <Text style={{ margin: 5, fontSize: 15, fontWeight: 600 }}>Số Dư :</Text>
+                                <Text style={{ margin: 5, marginBottom: 5 }}> {balance} ₫</Text>
+                            </View>
+
+
                         </View>
-                        {balance == 0 ? <TouchableOpacity onPress={() => setModalVisible(true)}><Text>Thêm số dư</Text></TouchableOpacity> :
-                            <TouchableOpacity onPress={() => setupdateModalVisible(true)}><Text>Cập nhật số dư</Text></TouchableOpacity>}
+
 
                         {/* <View style={styles.wrapDot}>
                             {
@@ -324,7 +341,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 10,
         flexDirection: 'row',
-        height: 70,
+        height: 75,
     },
     item1: {
         alignItems: 'center',
@@ -337,10 +354,11 @@ const styles = StyleSheet.create({
         height: 100,
     },
     balance: {
-        elevation: 5,
-        backgroundColor: '#00FF33',
-        width: '100%',
-        height: 120,
+        elevation: 2,
+        backgroundColor: 'white',
+        width: '70%',
+        marginLeft: 80,
+        height: 80,
         borderRadius: 10
     },
     centeredView: {
