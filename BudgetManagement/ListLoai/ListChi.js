@@ -8,7 +8,7 @@ import Home from '../Compoment/Home';
 
 const ListChi = (props) => {
     // var url = "https://63dc9b8a2308e3e319ea7194.mockapi.io/sanpham/listSpending"
-    var url ="http://192.168.1.8:3000/td_loaiChi"
+    var url = "http://192.168.1.109:3000/td_loaiChi"
     const [listcontact, setlistcontact] = useState([])
     const [reloading, setreloading] = useState(false)
 
@@ -120,17 +120,18 @@ const ListChi = (props) => {
     return (
         <View style={{ flex: 1 }}>
 
-        <View style={{flexDirection:'row',marginTop:60,
-            justifyContent: 'center', alignItems: 'center', textAlign: "center",
-            fontSize: 20, color: 'blue', backgroundColor: 'white', margin: 10, padding: 5, borderRadius: 20, elevation: 10
-        }}>
-        <TouchableOpacity onPress={quoaylai} >
+            <View style={{
+                flexDirection: 'row', marginTop: 60,
+                justifyContent: 'center', alignItems: 'center', textAlign: "center",
+                fontSize: 20, color: 'blue', backgroundColor: 'white', margin: 10, padding: 5, borderRadius: 20, elevation: 10
+            }}>
+                <TouchableOpacity onPress={quoaylai} >
                     <Image source={require('../assets/arrow.png')}
-                        style={{ width: 20, height: 20, resizeMode: 'contain',marginRight:80 }}></Image>
+                        style={{ width: 20, height: 20, resizeMode: 'contain', marginRight: 80 }}></Image>
                 </TouchableOpacity>
-            <Text style={{fontSize: 20, color: 'blue', backgroundColor: 'white',marginRight:90}}>
-                Quản lý loại thu chi</Text>
-        </View>
+                <Text style={{ fontSize: 20, color: 'blue', backgroundColor: 'white', marginRight: 90 }}>
+                    Quản lý loại thu chi</Text>
+            </View>
 
 
             <FlatList
