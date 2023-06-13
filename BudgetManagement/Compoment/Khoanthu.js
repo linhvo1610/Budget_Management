@@ -26,7 +26,7 @@ const Khoanthu = (props) => {
         dem++;
         getRecord();
         setcounter(dem);
-        
+
 
     });
 
@@ -77,11 +77,11 @@ const Khoanthu = (props) => {
                 setprice(data.price);
                 setdescription(data.description);
                 console.log(title);
-              
+
             }).finally(() => setisLoading(false));
     }
 
-    
+
 
 
 
@@ -102,57 +102,57 @@ const Khoanthu = (props) => {
             </TouchableOpacity>
 
             <View style={{ width: "100%", height: 350 }}>
-               <FlatList>
-               <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, borderRadius: 8, padding: 10 }}>
-                <View style={{ flexDirection: 'row' }}>
-                    <Text style={{
-                        marginBottom: 10,
-                        fontWeight: 'bold',
-                        color: '#d63341',
-                        fontSize: 15,
-                        marginLeft: 8,
-                        marginTop: 2,
-                        flex: 8
+                <FlatList>
+                    <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, borderRadius: 8, padding: 10 }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{
+                                marginBottom: 10,
+                                fontWeight: 'bold',
+                                color: '#d63341',
+                                fontSize: 15,
+                                marginLeft: 8,
+                                marginTop: 2,
+                                flex: 8
 
-                    }} > {title}</Text>
+                            }} > {title}</Text>
 
-                </View>
-
-
-             
-
-
-                <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
-                    <Text style={{ marginBottom: 5 }} > {price}</Text>
-
-
-                </View>
-                <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
-                    <Text style={{ marginBottom: 5 }} > {description}</Text>
-
-
-                </View>
-                <View style={{ flexDirection: 'row', borderBottomWidth: 0.5, marginBottom: 10, marginTop: 10 }}>
-                </View>
+                        </View>
 
 
 
 
+
+                        <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
+                            <Text style={{ marginBottom: 5 }} > {price}</Text>
+
+
+                        </View>
+                        <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
+                            <Text style={{ marginBottom: 5 }} > {description}</Text>
+
+
+                        </View>
+                        <View style={{ flexDirection: 'row', borderBottomWidth: 0.5, marginBottom: 10, marginTop: 10 }}>
+                        </View>
+
+
+
+
+
+                    </View>
+                </FlatList>
 
             </View>
-               </FlatList>
-
-            </View>
 
 
-           
+
             <View style={{
                 position: 'absolute',
                 bottom: 0,
             }}>
                 <TouchableOpacity>
                     <IonIcon name='add-circle'
-                    size={20}></IonIcon>
+                        size={20}></IonIcon>
                 </TouchableOpacity>
             </View>
         </View>
