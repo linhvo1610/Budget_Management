@@ -76,5 +76,20 @@
       "note": "ffdsfds",
       "id": 6
     }
+  ],
+  "tb_khoanthu": [
+    {
+      "title": "Tien luong",
+      "price": 6000000,
+      "date": "8-4-2023",
+      "note": "Luong cua Hai"
+      
+    },
+    {
+      "title": "Tien uong",
+      "price": 6000000,
+      "date": "8-4-2023",
+      "note": "Luong cua Hai"
+    }
   ]
 }
