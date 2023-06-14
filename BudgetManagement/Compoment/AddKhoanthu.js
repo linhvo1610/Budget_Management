@@ -7,8 +7,8 @@ import { SelectList } from 'react-native-dropdown-select-list'
 
 const AddKhoanthu = ({ navigation }) => {
 
-    var url = "http://192.168.1.11:3000/tb_khoanthu"
-    var uri = 'http://192.168.1.8:3000/tb_loaiThu';
+    var url = "http://192.168.0.103:3000/tb_khoanthu"
+    var uri = 'http://192.168.0.103:3000/tb_loaiThu';
     const today = new Date();
     const startDate = getFormatedDate(today.setDate(today.getDate() + 1), 'YYYY/MM/DD')
     const [open, setOpen] = useState(false)
@@ -76,7 +76,7 @@ const AddKhoanthu = ({ navigation }) => {
     const [data,setData] = React.useState([]);
 
     const getData = () =>{
-        let link_api = 'http://192.168.1.8:3000/tb_loaiThu'
+        let link_api = 'http://192.168.0.103:3000/tb_loaiThu'
         fetch(link_api)
         .then((res) =>{
             return res.json();

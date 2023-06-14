@@ -67,7 +67,7 @@ const Khoanchi = ({ navigation }) => {
         }
     };
 
-
+ 
 
     useEffect(() => {
         const getData = async () => {
@@ -281,8 +281,30 @@ const Khoanchi = ({ navigation }) => {
         <View style={styles.container}>
 
 
+<View style={{ alignItems: 'center'}}>  
+<Text style={styles.status}>CHI TIÊU
+            
+           
+            </Text>
+             </View>
+             
+            
+            <View style={{
+                    position: 'absolute',
+                    marginTop:20,
+                  
+                    marginLeft:330,
+                }}>
+                    <TouchableOpacity>
+                        <IonIcon name='add-circle'
+                            size={40}
+                            color={'orange'}
+                            onPress={() => setModalVisible(true)}></IonIcon>
+                    </TouchableOpacity>
+                </View>
+            
 
-            <Text style={styles.status}>CHI TIÊU</Text>
+            
 
 
 
@@ -319,18 +341,7 @@ const Khoanchi = ({ navigation }) => {
                 shadowRadius: 4,
                 elevation: 5
             }}>
-                <View style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    marginLeft:260,
-                }}>
-                    <TouchableOpacity>
-                        <IonIcon name='add-circle'
-                            size={40}
-                            color={'green'}
-                            onPress={() => setModalVisible(true)}></IonIcon>
-                    </TouchableOpacity>
-                </View>
+               
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -439,18 +450,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
 
-        alignItems: 'center',
+       
 
 
     },
     status: {
         width: '100%',
         backgroundColor: 'white',
-        height: 50,
+        height: 70,
         color: 'blue',
         fontWeight: 'bold',
         alignContent: 'center',
-        paddingTop: 10,
+        paddingTop: 20,
         textAlign: 'center'
     },
     appButton: {

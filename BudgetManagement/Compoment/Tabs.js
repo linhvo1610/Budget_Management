@@ -16,10 +16,8 @@ const Tabs = () => {
           options={{
             tabBarIcon: () =>(
               <Image style={{width:30, height:30,}} resizeMode="stretch" source={require('../assets/Info.png')}/>          )}} />
-          <Tab.Screen name="Khoanthu" component={Khoanthu} 
-          options={{
-            tabBarIcon: () =>(
-              <Image style={{width:30, height:30,}} resizeMode="stretch" source={require('../assets/khoanthu.png')}/>          )}}         />
+        
+        
           <Tab.Screen name="Khoanchi" component={Khoanchi} 
           options={{
             tabBarIcon: () =>(
