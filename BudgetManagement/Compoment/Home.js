@@ -50,7 +50,6 @@ const Home = ({ navigation }) => {
                 if (value !== null) {
                     let parsed = JSON.parse(value)
                     setinformation(parsed);
-                    console.log(information.username);
                 }
             } catch (e) {
                 // error reading value
@@ -62,27 +61,30 @@ const Home = ({ navigation }) => {
 
         return () => {
         }
-    }, [])
+    }, [information._id,balance])
     const getBalance = () => {
+        if (!information._id) return;
         fetch(API.getbalance + information._id)
             .then((response) => {
                 return response.json();
             })
             .then(async (data_json) => {
-                let objB = data_json.data[0];
-                console.log(objB);
-                try {
-                    await AsyncStorage.setItem("balance", JSON.stringify(objB));
-                    // console.log(objB.balance);
+                if (data_json.data) {
+                    let objB = data_json.data[0];
+                    console.log('log data' + objB);
                     setbalance(objB.balance);
-                    console.log(balance);
-                    setid(objB._id);
-                    console.log(id);
-
-                } catch (e) {
-                    // saving error
-                    console.log(e);
+                    try {
+                        await AsyncStorage.setItem("balance", JSON.stringify(objB));
+                        console.log("log async",objB);
+                        // }
+                    } catch (e) {
+                        // saving error
+                        console.log(e);
+                    }
                 }
+                
+
+
             })
     }
 
@@ -142,7 +144,7 @@ const Home = ({ navigation }) => {
 
     return (
         <View>
-            <View style={{backgroundColor:'#58fcf2',borderBottomLeftRadius:8,borderBottomRightRadius:8,elevation:2}}>
+            <View style={{ backgroundColor: '#58fcf2', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, elevation: 2 }}>
                 <View style={styles.ngang}>
                     <TouchableOpacity onPress={chuyentr}>
                         <Image style={styles.img} source={require('../assets/meme.jpg')} />
@@ -151,34 +153,34 @@ const Home = ({ navigation }) => {
 
                 </View>
                 <View style={styles.balance}>
-                            <View  >
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
-                                    <Text style={{ margin: 8, fontSize: 17, fontWeight: 'bold' }}>VÍ CỦA TÔI</Text>
-                                    {balance == 0 ? <TouchableOpacity onPress={() => setModalVisible(true)} style={{ margin: 8 }}>
-                                        <Icon name="plus"
-                                            size={20}></Icon>
-                                    </TouchableOpacity> : <TouchableOpacity onPress={() => setupdateModalVisible(true)} style={{ margin: 8 }}>
-                                        <Icon name="plus"
-                                            size={20}></Icon>
-                                    </TouchableOpacity>}
-
-                                </View>
-                                <View style={{ borderBottomWidth: 0.5, opacity: 0.5 }}></View>
-                            </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
-                                <Text style={{ margin: 5, fontSize: 15, fontWeight: 600 }}>Số Dư :</Text>
-                                <Text style={{ margin: 5, marginBottom: 5 }}> {balance} ₫</Text>
-                            </View>
-
+                    <View  >
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
+                            <Text style={{ margin: 8, fontSize: 17, fontWeight: 'bold' }}>VÍ CỦA TÔI</Text>
+                            {balance == 0 ? <TouchableOpacity onPress={() => setModalVisible(true)} style={{ margin: 8 }}>
+                                <Icon name="plus"
+                                    size={20}></Icon>
+                            </TouchableOpacity> : <TouchableOpacity onPress={() => setupdateModalVisible(true)} style={{ margin: 8 }}>
+                                <Icon name="plus"
+                                    size={20}></Icon>
+                            </TouchableOpacity>}
 
                         </View>
+                        <View style={{ borderBottomWidth: 0.5, opacity: 0.5 }}></View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                        <Text style={{ margin: 5, fontSize: 15, fontWeight: 600 }}>Số Dư :</Text>
+                        <Text style={{ margin: 5, marginBottom: 5 }}> {balance} ₫</Text>
+                    </View>
+
+
+                </View>
             </View>
             <View>
-                
+
             </View>
 
 
-          
+
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -288,7 +290,7 @@ const styles = StyleSheet.create({
         marginLeft: 80,
         height: 80,
         borderRadius: 10,
-        marginBottom:15
+        marginBottom: 15
     },
     centeredView: {
         flex: 1,
