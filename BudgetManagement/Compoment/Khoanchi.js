@@ -165,7 +165,7 @@ const Khoanchi = ({ navigation }) => {
         }
     }
     const getcategory = () => {
-        fetch('http://192.168.102.12:8000/api/category')
+        fetch('http://192.168.2.140:3000/api/category')
             .then(res => res.json())
             .then(result => {
                 console.log(result);
@@ -255,7 +255,7 @@ const Khoanchi = ({ navigation }) => {
 
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.102.12:8000/api/record', {
+        fetch('http://192.168.2.140:3000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
@@ -288,10 +288,10 @@ const Khoanchi = ({ navigation }) => {
             id_balance: idbalance,
             is_expense: isChecked,
             date: date,
-            
+
         }
         console.warn("item", item)
-        console.log('log update',API.updaterecord + idrecord);
+        console.log('log update', API.updaterecord + idrecord);
         fetch(API.updaterecord + idrecord, {
             method: 'PUT',
             headers: { // config data
@@ -309,7 +309,7 @@ const Khoanchi = ({ navigation }) => {
 
 
 
-       
+
 
 
 
@@ -410,7 +410,7 @@ const Khoanchi = ({ navigation }) => {
             setuserId(item.id_user);
             setSelectedValue(item.id_cat);
             setChecked(item.is_expense);
-           
+
         }
 
 
@@ -469,7 +469,7 @@ const Khoanchi = ({ navigation }) => {
 
                             </View>
 
-                            <TouchableOpacity style={{ flex: 1 }} onPress={() => {Selectrecord(item._id);setupdateModalVisible(true)}}>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={() => { Selectrecord(item._id); setupdateModalVisible(true) }}>
                                 <Icon
                                     name='refresh-circle'
                                     size={14}
@@ -737,7 +737,7 @@ const Khoanchi = ({ navigation }) => {
 
                             {isChecked == true ? <Pressable
                                 style={[styles.button, styles.buttonClose]}
-                                onPress={() => {UpdateRecord() }}
+                                onPress={() => { UpdateRecord() }}
                             >
                                 <Text style={styles.textStyle}>Sửa Giao Dịch Chi</Text>
                             </Pressable> : <Pressable
