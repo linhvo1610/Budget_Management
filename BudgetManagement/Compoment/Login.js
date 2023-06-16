@@ -62,8 +62,8 @@ const Login = (props) => {
     return (
         <View style={{ flex: 1 }}>
             <View>
-                <Text style={{ marginTop: 50, marginLeft: 25, fontSize: 25, fontStyle: 'italic', marginLeft:150}}>Login</Text>
-                <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 15, fontStyle: 'italic', marginLeft:130}}>Welcome back</Text>
+                <Text style={{ marginTop: 50, marginLeft: 25, fontSize: 25, fontStyle: 'italic', }}>Login</Text>
+                <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 15, fontStyle: 'italic', }}>Welcome back</Text>
             </View>
            
             <View style={{ marginTop: 50, alignItems: 'center', }}>
@@ -98,10 +98,11 @@ const Login = (props) => {
 
                 <TouchableHighlight style={{ marginTop: 20, marginBottom: 10, width: '100%' }}>
                     <View style={{alignContent:'center',textAlign: 'center', fontWeight: 'bold',flexDirection:'row'}} >
-                        <Text style={{marginRight:5,marginLeft:80}}>You don't have an account?</Text>
+                        <Text style={{marginRight:5}}>You don't have an account?</Text>
                         <Text style={{ color: '#ff8c00' }} onPress={() => props.navigation.navigate("Res")} >Sign-up</Text>
 
                     </View>
+
                 </TouchableHighlight>
 
             </View>
