@@ -117,35 +117,17 @@ const Khoanthu = (props) => {
                             }} > {title}</Text>
 
                         </View>
-
-
-
-
-
                         <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
                             <Text style={{ marginBottom: 5 }} > {price}</Text>
-
-
                         </View>
                         <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
                             <Text style={{ marginBottom: 5 }} > {description}</Text>
-
-
                         </View>
                         <View style={{ flexDirection: 'row', borderBottomWidth: 0.5, marginBottom: 10, marginTop: 10 }}>
                         </View>
-
-
-
-
-
                     </View>
                 </FlatList>
-
             </View>
-
-
-
             <View style={{
                 position: 'absolute',
                 bottom: 0,
