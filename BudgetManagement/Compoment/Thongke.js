@@ -132,38 +132,38 @@ const ThongKe = ({ navigation }) => {
     const sort = () => {
 
         var date = new Date();
-        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() ;
-        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime() ;
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime();
         var first = date.getDate() - date.getDay(); // First day is the day of the month - the day of the week
         var last = first + 6; // last day is the first day + 6
 
         var firstDayofWeek = new Date(date.setDate(first)).toUTCString();
         var lastdayOfWeek = new Date(date.setDate(last)).toUTCString();
 
-        console.log("first day",firstDay)
-        console.log("last day",lastDay)
+        console.log("first day", firstDay)
+        console.log("last day", lastDay)
         if (data) {
             const newData = data.filter(item => {
-                const sdate= new Date(item.date).getTime();
-                
-                if (firstDay<= sdate && sdate <= lastDay) {
+                const sdate = new Date(item.date).getTime();
+
+                if (firstDay <= sdate && sdate <= lastDay) {
                     return true;
                 } return false;
 
 
             }
             )
-            console.log('new data',newData);
+            console.log('new data', newData);
             setdata(newData);
-           
-            
+
+
 
 
 
         }
     }
     const getcategory = () => {
-        fetch('http://192.168.102.12:8000/api/category')
+        fetch('http://192.168.2.140:8000/api/category')
             .then(res => res.json())
             .then(result => {
                 console.log(result);
@@ -175,7 +175,7 @@ const ThongKe = ({ navigation }) => {
     }
 
     const getListrecord = () => {
-        if(!userId) return;
+        if (!userId) return;
         fetch(API.getrecord + userId)
 
             .then((data_res) => {
@@ -254,7 +254,7 @@ const ThongKe = ({ navigation }) => {
 
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.102.12:8000/api/record', {
+        fetch('http://192.168.2.140:8000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
@@ -501,7 +501,7 @@ const ThongKe = ({ navigation }) => {
 
 
             <Text style={styles.status}>THỐNG KÊ</Text>
-            <Button title='sort' onPress={()=>sort()}></Button>
+            <Button title='sort' onPress={() => sort()}></Button>
 
 
 
