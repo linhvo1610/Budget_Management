@@ -41,12 +41,9 @@ const Login = (props) => {
                             await AsyncStorage.setItem("login", JSON.stringify(objU));
                             console.log(objU);
                             alert('đăng nhập thành công')
-                            // setusername("")
-                            // setpassword("")
                             props.navigation.navigate("Tab");
                             // }
                         } catch (e) {
-                            // saving error
                             console.log(e);
                         }
 
