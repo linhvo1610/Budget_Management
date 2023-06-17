@@ -58,11 +58,7 @@ const Khoanchi = ({ navigation }) => {
     const [idrecord, setidrecord] = useState()
 
 
-    console.log(isChecked);
-    console.log(idrecord);
     console.log(date);
-    console.log(idbalance);
-    console.log(selectedValue);
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
@@ -135,8 +131,6 @@ const Khoanchi = ({ navigation }) => {
                 console.log(e);
             }
 
-
-
         }
 
         getData();
@@ -145,7 +139,7 @@ const Khoanchi = ({ navigation }) => {
         return () => {
 
         }
-    }, [idbalance, balance])
+    }, [userId])
     const sort = () => {
         if (data) {
             const newData = data.filter(item => {
@@ -177,6 +171,7 @@ const Khoanchi = ({ navigation }) => {
     }
 
     const getListrecord = () => {
+        if (!userId) return;
         fetch(API.getrecord + userId)
 
             .then((data_res) => {
@@ -186,6 +181,7 @@ const Khoanchi = ({ navigation }) => {
                 if (data_json.data) {
                     const newData = data_json.data.sort((a, b) => new Date(b.date) - new Date(a.date));
                     setdata(newData);
+                    console.log('data', newData);
                 }
 
 
@@ -305,6 +301,10 @@ const Khoanchi = ({ navigation }) => {
             })
         })
     }
+    function handleUpdate() {
+        UpdateRecord();
+        getListrecord();
+    }
     renderItem = ({ item, index }) => {
 
 
@@ -412,6 +412,12 @@ const Khoanchi = ({ navigation }) => {
             setChecked(item.is_expense);
 
         }
+        const formatDate = (dateString) => {
+            const date = new Date(dateString);
+            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        };
+
+        console.log('log img', item.id_cat.image);
 
 
         return (
@@ -419,18 +425,21 @@ const Khoanchi = ({ navigation }) => {
             <ScrollView>
                 {item.is_expense == false ?
                     <TouchableOpacity onLongPress={() => submit1()}>
-                        <View style={{ margin: 10, backgroundColor: '#65f249', elevation: 5, borderRadius: 8, padding: 10 }}>
-
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 18, fontWeight: '600' }}>{item.title}</Text>
-                            <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5, flexDirection: 'row' }}>
-
-                                <Text style={{ color: 'white', fontWeight: '500' }}>Số dư:</Text>
-                                <Text style={{ marginBottom: 5, color: 'white' }} >    {item.price}₫</Text>
+                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
 
-                            </View>
-                            <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
-                                <Text style={{ marginBottom: 5 }} > {item.description}</Text>
+
+                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+
+                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                <Image style={{
+                                    width: 40, height: 40, marginRight: 10
+                                }} source={{
+                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
+                                }} ></Image>
+                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
 
 
                             </View>
@@ -439,9 +448,9 @@ const Khoanchi = ({ navigation }) => {
                                 <Icon
                                     name='refresh-circle'
                                     size={14}
-                                    color={'white'}
+                                    color={'green'}
                                 />
-                                <Text>Cập nhật</Text>
+
                             </TouchableOpacity>
 
 
@@ -453,18 +462,18 @@ const Khoanchi = ({ navigation }) => {
                         </View>
                     </TouchableOpacity> :
                     <TouchableOpacity onLongPress={() => submit1()}>
-                        <View style={{ margin: 10, backgroundColor: '#fa3c49', elevation: 5, borderRadius: 8, padding: 10 }}>
+                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 18, fontWeight: '600' }}>{item.title}</Text>
-                            <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5, flexDirection: 'row' }}>
-
-                                <Text style={{ color: 'white', fontWeight: '500' }}>Số dư:</Text>
-                                <Text style={{ marginBottom: 5, color: 'white' }} >   - {item.price}₫</Text>
-
-
-                            </View>
-                            <View style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 5 }}>
-                                <Text style={{ marginBottom: 5 }} > {item.description}</Text>
+                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                <Image style={{
+                                    width: 40, height: 40, marginRight: 10
+                                }} source={{
+                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
+                                }} ></Image>
+                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    - {item.price} ₫</Text>
 
 
                             </View>
@@ -526,7 +535,9 @@ const Khoanchi = ({ navigation }) => {
                 backgroundColor: "white",
                 borderTopLeftRadius: 20,
                 borderTopRightRadius: 20,
-
+                flex: 1, 
+                justifyContent: 'center', 
+                alignItems: 'center',
                 shadowColor: "#000",
                 shadowOffset: {
                     width: 0,
@@ -539,7 +550,6 @@ const Khoanchi = ({ navigation }) => {
                 <View style={{
                     position: 'absolute',
                     bottom: 0,
-                    marginLeft: 260,
                 }}>
                     <TouchableOpacity>
                         <IonIcon name='add-circle'
@@ -573,7 +583,6 @@ const Khoanchi = ({ navigation }) => {
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ghi chú:</Text>
                                 <TextInput style={styles.inputmodel} placeholder='Nhập ghi chú' value={description} onChangeText={text => setdescription(text)}></TextInput>
                             </View>
-
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180, marginBottom: 10 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Loại Giao Dịch:</Text>
                                 <View style={{ borderWidth: 0.5, width: '60%', height: 50, borderRadius: 5 }}>
@@ -665,20 +674,20 @@ const Khoanchi = ({ navigation }) => {
                             <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', marginBottom: 15 }}>Sửa Giao Dịch</Text>
 
 
-                            <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
+                            <View style={{ width: '100%', alignContent: 'center' }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Tiêu đề:</Text>
                                 <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)}></TextInput>
                             </View>
-                            <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
+                            <View style={{ width: '100%', alignContent: 'center' }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Số Tiền:</Text>
                                 <TextInput style={styles.inputmodel} placeholder='Nhập số tiền' value={price} onChangeText={text => setprice(text)}></TextInput>
                             </View>
-                            <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
+                            <View style={{ width: '100%', alignContent: 'center' }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ghi chú:</Text>
                                 <TextInput style={styles.inputmodel} placeholder='Nhập ghi chú' value={description} onChangeText={text => setdescription(text)}></TextInput>
                             </View>
 
-                            <View style={{ width: '100%', alignContent: 'center', marginLeft: 180, marginBottom: 10 }}>
+                            <View style={{ width: '100%', alignContent: 'center', marginBottom: 10 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Loại Giao Dịch:</Text>
                                 <View style={{ borderWidth: 0.5, width: '60%', height: 50, borderRadius: 5 }}>
                                     <Picker
@@ -729,7 +738,7 @@ const Khoanchi = ({ navigation }) => {
                                     )}
                                 </View>
                             </View>
-                            <View style={{ flexDirection: 'row', marginRight: 160, marginBottom: 20 }}>
+                            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
                                 <Text style={{ marginRight: 20, textAlign: 'left', fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Khoản Chi?</Text>
                                 <Checkbox style={{ height: 20 }} value={isChecked} onValueChange={setChecked} />
                             </View>
@@ -737,12 +746,12 @@ const Khoanchi = ({ navigation }) => {
 
                             {isChecked == true ? <Pressable
                                 style={[styles.button, styles.buttonClose]}
-                                onPress={() => { UpdateRecord() }}
+                                onPress={() => handleUpdate()}
                             >
                                 <Text style={styles.textStyle}>Sửa Giao Dịch Chi</Text>
                             </Pressable> : <Pressable
                                 style={[styles.button, styles.buttonClose]}
-                                onPress={() => { UpdateRecord() }}
+                                onPress={() => handleUpdate()}
                             >
                                 <Text style={styles.textStyle}>Sửa Giao Dịch Thu</Text>
                             </Pressable>}
@@ -823,7 +832,8 @@ const styles = StyleSheet.create({
     modalView: {
         margin: 20,
         width: '100%',
-
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 35,
