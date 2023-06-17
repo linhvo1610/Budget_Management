@@ -7,8 +7,8 @@ import { SelectList } from 'react-native-dropdown-select-list'
 
 const AddKhoanthu = ({ navigation }) => {
 
-    var url = "http://192.168.2.140:8000/tb_khoanthu"
-    var uri = 'http://192.168.2.140:8000/tb_loaiThu';
+    var url = "http://192.168.1.11:3000/tb_khoanthu"
+    var uri = 'http://192.168.1.8:3000/tb_loaiThu';
     const today = new Date();
     const startDate = getFormatedDate(today.setDate(today.getDate() + 1), 'YYYY/MM/DD')
     const [open, setOpen] = useState(false)
@@ -73,22 +73,22 @@ const AddKhoanthu = ({ navigation }) => {
 
     const [selected, setSelected] = React.useState("");
 
-    const [data, setData] = React.useState([]);
+    const [data,setData] = React.useState([]);
 
-    const getData = () => {
-        let link_api = 'http://192.168.2.140:8000/tb_loaiThu'
+    const getData = () =>{
+        let link_api = 'http://192.168.1.8:3000/tb_loaiThu'
         fetch(link_api)
-            .then((res) => {
-                return res.json();
-            })
-            .then((res_json) => {
-                let arr_for = res_json.map((item, index, src_arr) => {
-                    return { label: item.id, value: item.title }
-                });
-                setData(arr_for);
-            })
+        .then((res) =>{
+            return res.json();
+        } )
+        .then((res_json) =>{
+            let arr_for = res_json.map((item, index, src_arr)=>{
+                return {label: item.id, value: item.title}
+            });
+            setData(arr_for);
+        })
     }
-    React.useEffect(() => {
+    React.useEffect(()=>{
         getData();
     });
 
@@ -112,7 +112,7 @@ const AddKhoanthu = ({ navigation }) => {
                 <TextInput style={styles.textip} onChangeText={(text) => setprice(text)} ></TextInput>
 
 
-                <View style={{ width: 290, marginLeft: 10, borderRadius: 20, marginTop: 10 }}>
+                <View style={{width:290,marginLeft:10,borderRadius:20,marginTop:10}}>
                     <SelectList
                         setSelected={(val) => setSelected(val)}
                         data={data}
@@ -240,5 +240,5 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-
+    
 })
