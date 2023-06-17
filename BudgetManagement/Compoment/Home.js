@@ -61,7 +61,7 @@ const Home = ({ navigation }) => {
 
         return () => {
         }
-    }, [information._id,balance])
+    }, [information._id, balance])
     const getBalance = () => {
         if (!information._id) return;
         fetch(API.getbalance + information._id)
@@ -75,14 +75,14 @@ const Home = ({ navigation }) => {
                     setbalance(objB.balance);
                     try {
                         await AsyncStorage.setItem("balance", JSON.stringify(objB));
-                        console.log("log async",objB);
+                        console.log("log async", objB);
                         // }
                     } catch (e) {
                         // saving error
                         console.log(e);
                     }
                 }
-                
+
 
 
             })
@@ -96,7 +96,7 @@ const Home = ({ navigation }) => {
             balance: addbalance,
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.102.12:8000/api/balance', {
+        fetch('http://192.168.1.109:3000/api/balance', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
