@@ -351,7 +351,7 @@ const Khoanchi = ({ navigation }) => {
         }
 
         const submit = () => {
-            Alert.alert('Xóa bài viết', 'Bạn có muốn xóa giao dịch này?', [
+            Alert.alert('Xóa giao dịch', 'Bạn có muốn xóa giao dịch này?', [
                 {
                     text: 'Cancel',
 
@@ -396,7 +396,7 @@ const Khoanchi = ({ navigation }) => {
             <ScrollView>
                 {item.is_expense == false ?
                     <TouchableOpacity onLongPress={() => submit1()}>
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+                        <View style={styles.itemThuChi}>
                             <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
                             <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
                             <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
@@ -418,7 +418,7 @@ const Khoanchi = ({ navigation }) => {
                         </View>
                     </TouchableOpacity> :
                     <TouchableOpacity onLongPress={() => submit1()}>
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+                        <View style={styles.itemThuChi}>
 
                             <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
                             <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
@@ -435,7 +435,7 @@ const Khoanchi = ({ navigation }) => {
                                 <Icon
                                     name='refresh-circle'
                                     size={14}
-                                    color={'white'}
+                                    color={'red'}
                                 />
                             </TouchableOpacity>
                         </View>
@@ -572,37 +572,40 @@ const Khoanchi = ({ navigation }) => {
                     </View>
                 </View>
             </Modal >
+
+            {/* Hiển thị phần sửa */}
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
-                visible={updatemodalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                    setupdateModalVisible(!updatemodalVisible);
-                }}>
+                onRequestClose={() => { setupdateModalVisible(false) }}
+                visible={updatemodalVisible}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', marginBottom: 15 }}>Sửa Giao Dịch</Text>
-
-
-                        <View style={{ width: '100%', alignContent: 'center' }}>
-                            <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Tiêu đề:</Text>
+                        <Text style={styles.modalText}>Sửa Giao Dịch</Text>
+                        <View style={{}}>
+                            <Text style={{ fontSize: 20, fontWeight: '500', }}>Tiêu đề:</Text>
                             <TextInput style={styles.textInput} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)}></TextInput>
                         </View>
-                        <View style={{ width: '100%', alignContent: 'center' }}>
-                            <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Số Tiền:</Text>
-                            <TextInput style={styles.textInput} placeholder='Nhập số tiền' value={price} onChangeText={text => setprice(text)}></TextInput>
+                        <View style={{}}>
+                            <Text style={{ fontSize: 20, fontWeight: '500', }}>Số tiền:</Text>
+                            <TextInput keyboardType='numeric' style={styles.textInput} placeholder='Nhập số tiền' value={price} onChangeText={text => setprice(text)}></TextInput>
                         </View>
-                        <View style={{ width: '100%', alignContent: 'center' }}>
-                            <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ghi chú:</Text>
+                        <View style={{}}>
+                            <Text style={{ fontSize: 20, fontWeight: '500', }}>Ghi chú:</Text>
                             <TextInput style={styles.textInput} placeholder='Nhập ghi chú' value={description} onChangeText={text => setdescription(text)}></TextInput>
                         </View>
-
-                        <View style={{ width: '100%', alignContent: 'center', marginBottom: 10 }}>
-                            <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Loại Giao Dịch:</Text>
-                            <View style={{ borderWidth: 0.5, width: '60%', height: 50, borderRadius: 5 }}>
+                        <View style={{ width: '95%', alignContent: 'center', }}>
+                            <Text style={{ fontSize: 20, fontWeight: '500', marginLeft: 3 }}>Loại giao dịch:</Text>
+                            <View style={[{
+                                borderColor: '#FF8C00',
+                                borderRadius: 5,
+                                borderWidth: 2,
+                                margin: 10,
+                                fontSize: 16,
+                                fontWeight: '500',
+                            }]}>
                                 <Picker
-                                    style={{ width: 300, borderWidth: 0.5 }}
+                                    style={{ borderWidth: 1, }}
                                     selectedValue={selectedValue}
                                     onValueChange={handleValueChange}
                                     itemStyle={styles.pickerItem}
@@ -619,23 +622,20 @@ const Khoanchi = ({ navigation }) => {
                                 </Picker>
                             </View>
                         </View>
-
-
-
-
                         <View>
-                            <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ngày:</Text>
-                            <View style={{ width: '65%', flexDirection: 'row', borderWidth: 1, borderRadius: 5, height: 40, padding: 8, marginBottom: 10 }}>
-                                <Text style={{ width: 250, marginRight: 10 }}>{currentdate}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: '500', }}>Thời gian:</Text>
+                            <View style={[{ flexDirection: 'row', borderColor: '#FF8C00', borderWidth: 2, width: 350, paddingTop: 8 }, styles.textInput]}>
+                                <Text style={{ width: 300, }}>{currentdate}</Text>
                                 {!isPickerShow && (
-                                    <View style={styles.btnContainer}>
-                                        <TouchableOpacity onPress={showPicker}><Icon
-                                            name='calendar'
-                                            size={20}></Icon></TouchableOpacity>
-
+                                    <View>
+                                        <TouchableOpacity onPress={showPicker} activeOpacity={0.5}>
+                                            <Image
+                                                source={{ uri: 'https://cdn-icons-png.flaticon.com/128/3652/3652191.png' }}
+                                                style={{ width: 25, height: 25 }}
+                                            ></Image>
+                                        </TouchableOpacity>
                                     </View>
                                 )}
-
                                 {/* The date picker */}
                                 {isPickerShow && (
                                     <DateTimePicker
@@ -644,41 +644,46 @@ const Khoanchi = ({ navigation }) => {
                                         display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                         is24Hour={true}
                                         onChange={onChange}
-                                        style={styles.datePicker}
                                     />
                                 )}
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-                            <Text style={{ marginRight: 20, textAlign: 'left', fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Khoản Chi?</Text>
-                            <Checkbox style={{ height: 20 }} value={isChecked} onValueChange={setChecked} />
+                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                            <Text style={{ marginRight: 10, textAlign: 'left', fontSize: 20, fontWeight: '500', marginBottom: 5 }}>Khoản Chi?</Text>
+                            <Checkbox style={{ height: 20, marginTop: 2 }} value={isChecked} onValueChange={setChecked} />
                         </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', margin: 10 }}>
+                            <Pressable
+                                style={[styles.button]}
+                                onPress={() => setupdateModalVisible(false)}>
+                                <Text style={styles.textStyle}>Hủy</Text>
+                            </Pressable>
+                            {isChecked == true ? <Pressable
+                                style={[styles.button, { marginLeft: 20, backgroundColor: '#00CD00', shadowRadius: 20 }]}
+                                onPress={() => { addRecord(); UpdateBalance1() }}
+                            >
+                                <Text style={styles.textStyle}>Sửa Khoản Chi</Text>
+                            </Pressable> : <Pressable
+                                style={[styles.button, { marginLeft: 20, backgroundColor: '#00CD00', shadowRadius: 20 }]}
+                                onPress={() => { addRecord(); UpdateBalance() }}
+                            >
+                                <Text style={styles.textStyle}>Sửa Khoản Thu</Text>
+                            </Pressable>}
 
-
-                        {isChecked == true ? <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => handleUpdate()}
-                        >
-                            <Text style={styles.textStyle}>Sửa Giao Dịch Chi</Text>
-                        </Pressable> : <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => handleUpdate()}
-                        >
-                            <Text style={styles.textStyle}>Sửa Giao Dịch Thu</Text>
-                        </Pressable>}
-
-
-
-
+                        </View>
                     </View>
                 </View>
-            </Modal>
+            </Modal >
         </View >
 
     )
 }
 export default Khoanchi;
 const styles = StyleSheet.create({
+
+    itemThuChi: {
+        margin: 10, backgroundColor: 'white', elevation: 5, padding: 10, borderRadius: 10
+    },
 
     container: {
         flex: 1,
