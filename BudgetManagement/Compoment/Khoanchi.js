@@ -395,51 +395,74 @@ const Khoanchi = ({ navigation }) => {
 
             <ScrollView>
                 {item.is_expense == false ?
-                    <TouchableOpacity onLongPress={() => submit1()}>
-                        <View style={styles.itemThuChi}>
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
-                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
-                                <Image style={{
-                                    width: 40, height: 40, marginRight: 10
-                                }} source={{
-                                    uri: "http://192.168.2.140:8000" + item.id_cat.image,
-                                }} ></Image>
-                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
-                                <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
-                            </View>
-                            <TouchableOpacity style={{ flex: 1 }} onPress={() => { Selectrecord(item._id); setupdateModalVisible(true) }}>
-                                <Icon
-                                    name='refresh-circle'
-                                    size={14}
-                                    color={'green'}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </TouchableOpacity> :
-                    <TouchableOpacity onLongPress={() => submit1()}>
-                        <View style={styles.itemThuChi}>
 
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
-                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
-                                <Image style={{
-                                    width: 40, height: 40, marginRight: 10
-                                }} source={{
-                                    uri: "http://192.168.2.140:8000" + item.id_cat.image,
-                                }} ></Image>
-                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
-                                <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    - {item.price} ₫</Text>
-                            </View>
+                    <View style={styles.itemThuChi}>
+                        <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+                            <Text style={styles.textItem}>Thời gian: {formatDate(item.date)}</Text>
                             <TouchableOpacity style={{ flex: 1 }} onPress={() => { Selectrecord(item._id); setupdateModalVisible(true) }}>
-                                <Icon
-                                    name='refresh-circle'
-                                    size={14}
-                                    color={'red'}
-                                />
+                                <Image
+                                    source={{ uri: 'https://cdn-icons-png.flaticon.com/128/5285/5285229.png' }}
+                                    style={{ width: 30, height: 30, marginBottom: 2 }}
+                                ></Image>
                             </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>}
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={[styles.textItem, { color: '#0033CC' }]}>Số tiền: +{item.price} VND</Text>
+                            <TouchableOpacity style={{ flex: 1, marginBottom: 5 }} onPress={() => { Selectrecord(item._id); setupdateModalVisible(true) }}>
+                                <Image
+                                    source={{ uri: 'https://cdn-icons-png.flaticon.com/128/10697/10697092.png' }}
+                                    style={{ width: 30, height: 30, marginBottom: 2 }}
+                                ></Image>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.textItem}>Nội dung: {item.description}</Text>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={() => submit1()}>
+                                <Image
+                                    source={{ uri: 'https://cdn-icons-png.flaticon.com/128/9153/9153963.png' }}
+                                    style={{ width: 30, height: 30, marginBottom: 2 }}
+                                ></Image>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    :
+
+                    <View style={styles.itemThuChi}>
+                        <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+                            <Text style={styles.textItem}>Thời gian: {formatDate(item.date)}</Text>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={() => { Selectrecord(item._id); setupdateModalVisible(true) }}>
+                                <Image
+                                    source={{ uri: 'https://cdn-icons-png.flaticon.com/128/5285/5285229.png' }}
+                                    style={{ width: 30, height: 30, marginBottom: 2 }}
+                                ></Image>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={[styles.textItem, { color: 'red' }]}>Số tiền: +{item.price} VND</Text>
+                            <TouchableOpacity style={{ flex: 1, marginBottom: 5 }} onPress={() => { Selectrecord(item._id); setupdateModalVisible(true) }}>
+                                <Image
+                                    source={{ uri: 'https://cdn-icons-png.flaticon.com/128/10697/10697092.png' }}
+                                    style={{ width: 30, height: 30, marginBottom: 2 }}
+                                ></Image>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.textItem}>Nội dung: {item.description}</Text>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={() => submit1()}>
+                                <Image
+                                    source={{ uri: 'https://cdn-icons-png.flaticon.com/128/9153/9153963.png' }}
+                                    style={{ width: 30, height: 30, marginBottom: 2 }}
+                                ></Image>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                }
             </ScrollView>
 
         )
@@ -680,6 +703,11 @@ const Khoanchi = ({ navigation }) => {
 }
 export default Khoanchi;
 const styles = StyleSheet.create({
+    textItem: {
+        fontSize: 20,
+        fontWeight: '600',
+        width: 320
+    },
 
     itemThuChi: {
         margin: 10, backgroundColor: 'white', elevation: 5, padding: 10, borderRadius: 10
