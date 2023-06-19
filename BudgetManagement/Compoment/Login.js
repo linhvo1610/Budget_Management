@@ -91,11 +91,11 @@ const Login = (props) => {
                 </TouchableOpacity>
                
             </View>
-            <View style={{ marginTop: 15, alignItems: 'center' }}>
+            <View style={{ marginTop: 15, alignItems: 'center',flex:1,alignItems:'center' }}>
 
                 <TouchableHighlight style={{ marginTop: 20, marginBottom: 10, width: '100%' }}>
                     <View style={{alignContent:'center',textAlign: 'center', fontWeight: 'bold',flexDirection:'row'}} >
-                        <Text style={{marginRight:5}}>You don't have an account?</Text>
+                        <Text style={{marginRight:5}}>You don't have an account?  </Text>
                         <Text style={{ color: '#ff8c00' }} onPress={() => props.navigation.navigate("Res")} >Sign-up</Text>
 
                     </View>

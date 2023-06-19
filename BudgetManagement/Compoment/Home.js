@@ -1,11 +1,13 @@
-import { StyleSheet, View, Text, Image, ScrollView, Dimensions, TouchableOpacity, Modal, Pressable, Alert } from "react-native";
+import { StyleSheet, View, Text, Image, ScrollView, Dimensions, TouchableOpacity, Modal, Pressable, Alert, FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { Component, useState } from 'react'
 import { useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { API } from './API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput } from "react-native-gesture-handler";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 
 const images = [
     'https://tse3.mm.bing.net/th?id=OIP.i0EhYlhSgyDXcbRqzcqz4AHaEy&pid=Api&P=0&h=180',
@@ -17,11 +19,35 @@ const images = [
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
+var dem = 0;
 
 const Home = ({ navigation }) => {
     const [imgActive, setimgActive] = useState(0);
     const [balance, setbalance] = useState(0);
     const [data, setdata] = useState();
+    const [counter, setcounter] = useState(dem);
+    const [reloading, setreloading] = useState(false);
+    const [title, settitle] = useState('');
+    const [price, setprice] = useState(0);
+    const [date, setdate] = useState(new Date());
+    const [image, setimage] = useState();
+    const [category, setcategory] = useState();
+    const [is_expense, setis_expense] = useState(false)
+    const [isLoading, setisLoading] = useState(true);
+    const [userId, setuserId] = useState()
+    const reloadData = React.useCallback(() => {
+        // xử lý công việc load lại dữ liệu đổ vào danh sách
+        setreloading(true); // set trạng thái bắt đầu reload
+        dem++;
+        getListrecord();
+        setcounter(dem);
+        // mô phỏng đợi reload, nếu là reload từ server thật thì không cần viết lệnh dưới
+        setTimeout(() => {
+            setreloading(false); // sau 2s thì đổi trạng thái không rload nữa
+        }, 2000);
+
+
+    });
     const [addbalance, setaddbalance] = useState(0);
     const [modalVisible, setModalVisible] = useState(false);
     const [updatemodalVisible, setupdateModalVisible] = useState(false);
@@ -50,6 +76,8 @@ const Home = ({ navigation }) => {
                 if (value !== null) {
                     let parsed = JSON.parse(value)
                     setinformation(parsed);
+                    setuserId(parsed._id);
+                    console.log('userid',userId);
                 }
             } catch (e) {
                 // error reading value
@@ -58,13 +86,14 @@ const Home = ({ navigation }) => {
         }
         getData();
         getBalance();
+        getListrecord();
 
         return () => {
         }
-    }, [information._id,balance])
+    }, [information._id, balance,userId])
     const getBalance = () => {
-        if (!information._id) return;
-        fetch(API.getbalance + information._id)
+        if (!userId) return;
+        fetch(API.getbalance + userId)
             .then((response) => {
                 return response.json();
             })
@@ -75,14 +104,14 @@ const Home = ({ navigation }) => {
                     setbalance(objB.balance);
                     try {
                         await AsyncStorage.setItem("balance", JSON.stringify(objB));
-                        console.log("log async",objB);
+                        console.log("log async", objB);
                         // }
                     } catch (e) {
                         // saving error
                         console.log(e);
                     }
                 }
-                
+
 
 
             })
@@ -137,18 +166,193 @@ const Home = ({ navigation }) => {
         })
     }
     const chuyentr = () => {
-        navigation.navigate('Information');
+        navigation.navigate('Khoanchi');
+    }
+
+    const getListrecord = () => {
+        if (!information._id) return;
+        fetch(API.getrecord +information._id)
+
+            .then((data_res) => {
+                return data_res.json();
+            })
+            .then((data_json) => {
+                if (data_json.data) {
+                    const newData = data_json.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    setdata(newData[0]);
+                    console.log('data', newData[0]._id);
+                    settitle(newData[0].title);
+                    setprice(newData[0].price);
+                    setimage(newData[0].id_cat.image);
+                    setcategory(newData[0].id_cat.name);
+                    setdate(newData[0].date);
+                    setis_expense(newData[0].is_expense);
+                    console.log('title',title);
+                    console.log('image',image);
+                    console.log('cat',category);
+                    console.log('date',date);
+                }
+
+
+
+            })
+            .catch((err) => {
+                // nếu xảy ra lỗi thì log lỗi
+                console.log(err);
+            }).finally(() => setisLoading(false));
+
+    }
+
+    renderItem = ({ item, index }) => {
+
+
+
+
+
+        const XoaItem = () => {
+            // if(! confirm ('Có đồng ý xóa không?') )
+            //     return; 
+
+            console.log("log delelte", API.deleterecord + item._id);
+            fetch(API.deleterecord + item._id, {
+                method: 'DELETE', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
+                headers: { // Định dạng dữ liệu gửi đi
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => {
+                    console.log(response.status);
+                    getListrecord()
+                    // nếu status là 200 thì là xóa thành công
+                    if (response.status == 200)
+                        alert("Xóa thành công");
+
+                })
+                .catch((err) => {  // catch để bắt lỗi ngoại lệ
+                    console.log(err);
+                });
+        }
+
+        const submit = () => {
+            Alert.alert('Xóa giao dịch', 'Bạn có muốn xóa giao dịch này?', [
+                {
+                    text: 'Cancel',
+
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => { XoaItem(); UpdateBalanceDel() } },
+            ]);
+
+        }
+        const submit1 = () => {
+            Alert.alert('Xóa giao dịch', 'Bạn có muốn xóa giao dịch này?', [
+                {
+                    text: 'Cancel',
+
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => { XoaItem(); UpdateBalanceDel2() } },
+            ]);
+
+        }
+        function Selectrecord() {
+            setidrecord(item._id);
+            settitle(item.title);
+            setprice(item.price);
+            setdescription(item.description);
+            setidbalance(item.id_balance);
+            setuserId(item.id_user);
+            setSelectedValue(item.id_cat);
+            setChecked(item.is_expense);
+
+        }
+        const formatDate = (dateString) => {
+            const date = new Date(dateString);
+            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        };
+
+        console.log('log img', item.id_cat.image);
+
+        return (
+
+
+            <ScrollView>
+                {item.is_expense == false ?
+
+                  
+                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+
+
+                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+
+                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                <Image style={{
+                                    width: 40, height: 40, marginRight: 10
+                                }} source={{
+                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
+                                }} ></Image>
+                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+
+
+                            </View>
+
+
+
+
+
+
+
+
+
+                        </View>
+                   
+                    :
+
+                   
+                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                <Image style={{
+                                    width: 40, height: 40, marginRight: 10
+                                }} source={{
+                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
+                                }} ></Image>
+                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+
+
+                            </View>
+
+
+
+                        </View>}
+
+
+
+            </ScrollView>
+
+        )
+
     }
 
 
-
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    };
     return (
         <View>
             <View style={{ backgroundColor: '#58fcf2', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, elevation: 2 }}>
                 <View style={styles.ngang}>
-                    <TouchableOpacity onPress={chuyentr}>
+                  
                         <Image style={styles.img} source={require('../assets/meme.jpg')} />
-                    </TouchableOpacity>
+
                     <Text style={{ fontSize: 25, fontWeight: 'bold', marginTop: 20, color: 'black' }}> Welcome, {information.username} </Text>
 
                 </View>
@@ -175,6 +379,72 @@ const Home = ({ navigation }) => {
 
                 </View>
             </View>
+            <View style={{ flexDirection: 'row',margin:10}}>
+                  <Text style={{fontSize: 16, lineHeight: 30, color:'grey',fontWeight:'bold' }}>Giao dịch mới nhất</Text>
+                  <TouchableOpacity style={{ flex:1}} onPress={chuyentr}>
+                  <Text style={{ flex:1, fontSize: 16, lineHeight: 30, color:'green', textAlign:'right',fontWeight:'bold' }}>Xem tất cả giao dịch</Text>
+                  </TouchableOpacity>
+               </View>
+
+            <ScrollView>
+                {is_expense == false ?
+
+                  
+                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+
+
+                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{title}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(date)}</Text>
+
+                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                <Image style={{
+                                    width: 40, height: 40, marginRight: 10
+                                }} source={{
+                                    uri: "http://192.168.102.12:8000" + image,
+                                }} ></Image>
+                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {category}</Text>
+                                <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
+
+
+                            </View>
+
+
+
+
+
+
+
+
+
+                        </View>
+                   
+                    :
+
+                   
+                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{title}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(date)}</Text>
+                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                <Image style={{
+                                    width: 40, height: 40, marginRight: 10
+                                }} source={{
+                                    uri: "http://192.168.102.12:8000" + image,
+                                }} ></Image>
+                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {category}</Text>
+                                <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
+
+
+                            </View>
+
+
+
+                        </View>}
+
+
+
+            </ScrollView>
             <View>
 
             </View>

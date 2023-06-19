@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, TextInput, Text, View, StyleSheet, TouchableHighlight, ImageBackground, StatusBar, TouchableOpacity, FlatList, Image, Share, Modal, ScrollView, RefreshControl, Alert, Pressable } from 'react-native'
+import { Button, TextInput, Text, View, StyleSheet, TouchableHighlight, ImageBackground, StatusBar, TouchableOpacity, FlatList, Image, Share, Modal, ScrollView, RefreshControl, Alert, Pressable, Animated } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,6 +16,7 @@ import Checkbox from 'expo-checkbox';
 
 
 import { API } from './API';
+import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 var dem = 0;
 const Khoanchi = ({ navigation }) => {
     const [reloading, setreloading] = useState(false)
@@ -55,7 +56,7 @@ const Khoanchi = ({ navigation }) => {
     const [isChecked, setChecked] = useState(false);
     const [startdate, setstartdate] = useState(new Date());
     const [enddate, setenddate] = useState(new Date());
-    const [idrecord, setidrecord] = useState()
+    const [idrecord, setidrecord] = useState();
 
 
     console.log(date);
@@ -139,7 +140,7 @@ const Khoanchi = ({ navigation }) => {
         return () => {
 
         }
-    }, [userId])
+    }, [userId, idbalance])
     const sort = () => {
         if (data) {
             const newData = data.filter(item => {
@@ -199,7 +200,7 @@ const Khoanchi = ({ navigation }) => {
         let item = {
             id: idbalance,
             id_user: userId,
-            balance: +balance + price,
+            balance: +balance + +price,
         }
         console.warn("item", item)
         fetch(API.updatebalance + idbalance, {
@@ -219,7 +220,7 @@ const Khoanchi = ({ navigation }) => {
         let item = {
             id: idbalance,
             id_user: userId,
-            balance: +balance - price,
+            balance: +balance + +price,
         }
         console.warn("item", item)
         fetch(API.updatebalance + idbalance, {
@@ -241,7 +242,7 @@ const Khoanchi = ({ navigation }) => {
 
         let objrecord = {
             title: title,
-            price: price,
+            price: isChecked ? -price : price,
             description: description,
             id_cat: selectedValue,
             id_user: userId,
@@ -262,12 +263,7 @@ const Khoanchi = ({ navigation }) => {
             .then((response) => {
                 console.log(response.status);
                 if (response.status == 201)
-                    alert("cập nhật thành công");
-                settitle('');
-                setprice(0);
-                setdescription(0);
-
-
+                    alert("thêm thành công");
             })
             .catch((err) => {  // catch để bắt lỗi ngoại lệ
                 console.log(err);
@@ -277,12 +273,13 @@ const Khoanchi = ({ navigation }) => {
         let item = {
             id: idrecord,
             title: title,
-            price: price,
+
             description: description,
             id_cat: selectedValue,
             id_user: userId,
             id_balance: idbalance,
             is_expense: isChecked,
+            price: isChecked ? -price : price,
             date: date,
 
         }
@@ -304,11 +301,18 @@ const Khoanchi = ({ navigation }) => {
     function handleUpdate() {
         UpdateRecord();
         getListrecord();
+        UpdateBalance();
+    }
+    function handleAdd() {
+        addRecord();
+        getListrecord();
+        UpdateBalance();
+        setModalVisible(false);
+        settitle('');
+        setprice(0);
+        setdescription('');
     }
     renderItem = ({ item, index }) => {
-
-
-
 
 
 
@@ -342,7 +346,7 @@ const Khoanchi = ({ navigation }) => {
             let obj = {
                 id: idbalance,
                 id_user: userId,
-                balance: +balance - +item.price,
+                balance: +balance + item.price,
             }
             console.warn("item", obj)
             fetch(API.updatebalance + idbalance, {
@@ -358,13 +362,15 @@ const Khoanchi = ({ navigation }) => {
                 })
             })
         }
+
         function UpdateBalanceDel2() {
             let obj = {
                 id: idbalance,
                 id_user: userId,
-                balance: +balance - +item.price,
+                balance: +balance + item.price,
             }
-            console.warn("item", obj)
+            console.log("item.price", item.price);
+            console.log("loog api del2", API.updatebalance + idbalance);
             fetch(API.updatebalance + idbalance, {
                 method: 'PUT',
                 headers: { // config data
@@ -380,7 +386,7 @@ const Khoanchi = ({ navigation }) => {
         }
 
         const submit = () => {
-            Alert.alert('Xóa bài viết', 'Bạn có muốn xóa giao dịch này?', [
+            Alert.alert('Xóa giao dịch', 'Bạn có muốn xóa giao dịch này?', [
                 {
                     text: 'Cancel',
 
@@ -391,7 +397,7 @@ const Khoanchi = ({ navigation }) => {
 
         }
         const submit1 = () => {
-            Alert.alert('Xóa bài viết', 'Bạn có muốn xóa giao dịch này?', [
+            Alert.alert('Xóa giao dịch', 'Bạn có muốn xóa giao dịch này?', [
                 {
                     text: 'Cancel',
 
@@ -418,81 +424,93 @@ const Khoanchi = ({ navigation }) => {
         };
 
         console.log('log img', item.id_cat.image);
+        const leftSwipe = () => {
 
+            return (
+                <TouchableOpacity style={styles.deletebox} onPress={() => submit()}>
+                    <View >
+                        <IonIcon
+                            name={"trash-outline"}
+                            size={30}></IonIcon>
+                    </View>
+                </TouchableOpacity>
+
+            )
+        }
+        const handleUpdateitem = () => {
+            Selectrecord(item._id);
+            setupdateModalVisible(true)
+        }
 
         return (
 
+
             <ScrollView>
                 {item.is_expense == false ?
-                    <TouchableOpacity onLongPress={() => submit1()}>
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+                    <GestureHandlerRootView>
+                        <Swipeable
+                            renderLeftActions={leftSwipe}>
+                            <TouchableOpacity onLongPress={() => handleUpdateitem()}>
+                                <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
 
 
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+                                    <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
 
-                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
-                                <Image style={{
-                                    width: 40, height: 40, marginRight: 10
-                                }} source={{
-                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
-                                }} ></Image>
-                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
-                                <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+                                    <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                        <Image style={{
+                                            width: 40, height: 40, marginRight: 10
+                                        }} source={{
+                                            uri: "http://192.168.102.12:8000" + item.id_cat.image,
+                                        }} ></Image>
+                                        <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                        <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
 
 
-                            </View>
+                                    </View>
 
-                            <TouchableOpacity style={{ flex: 1 }} onPress={() => { Selectrecord(item._id); setupdateModalVisible(true) }}>
-                                <Icon
-                                    name='refresh-circle'
-                                    size={14}
-                                    color={'green'}
-                                />
 
+
+
+
+
+
+
+
+                                </View>
                             </TouchableOpacity>
+                        </Swipeable>
+                    </GestureHandlerRootView> :
+                    <GestureHandlerRootView>
+                        <Swipeable
+                            renderLeftActions={leftSwipe}>
+                            <TouchableOpacity onLongPress={() => handleUpdateitem()}>
+                                <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+                                    <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+                                    <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                        <Image style={{
+                                            width: 40, height: 40, marginRight: 10
+                                        }} source={{
+                                            uri: "http://192.168.102.12:8000" + item.id_cat.image,
+                                        }} ></Image>
+                                        <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                        <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+
+
+                                    </View>
 
 
 
 
 
 
-
-                        </View>
-                    </TouchableOpacity> :
-                    <TouchableOpacity onLongPress={() => submit1()}>
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
-
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
-                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
-                                <Image style={{
-                                    width: 40, height: 40, marginRight: 10
-                                }} source={{
-                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
-                                }} ></Image>
-                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
-                                <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    - {item.price} ₫</Text>
-
-
-                            </View>
-
-                            <TouchableOpacity style={{ flex: 1 }} onPress={() => { Selectrecord(item._id); setupdateModalVisible(true) }}>
-                                <Icon
-                                    name='refresh-circle'
-                                    size={14}
-                                    color={'white'}
-                                />
+                                </View>
                             </TouchableOpacity>
-
-
-
-
-
-
-                        </View>
-                    </TouchableOpacity>}
+                        </Swipeable>
+                    </GestureHandlerRootView>}
 
 
             </ScrollView>
@@ -535,8 +553,8 @@ const Khoanchi = ({ navigation }) => {
                 backgroundColor: "white",
                 borderTopLeftRadius: 20,
                 borderTopRightRadius: 20,
-                flex: 1, 
-                justifyContent: 'center', 
+                flex: 1,
+                justifyContent: 'center',
                 alignItems: 'center',
                 shadowColor: "#000",
                 shadowOffset: {
@@ -573,11 +591,120 @@ const Khoanchi = ({ navigation }) => {
 
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Tiêu đề:</Text>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)} required></TextInput>
+                            </View>
+                            <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
+                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Số Tiền:</Text>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập số tiền' value={price.toString()} onChangeText={text => setprice(text)}></TextInput>
+                            </View>
+                            <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
+                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ghi chú:</Text>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập ghi chú' value={description} onChangeText={text => setdescription(text)}></TextInput>
+                            </View>
+                            <View style={{ width: '100%', alignContent: 'center', marginLeft: 180, marginBottom: 10 }}>
+                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Loại Giao Dịch:</Text>
+                                <View style={{ borderWidth: 0.5, width: '60%', height: 50, borderRadius: 5 }}>
+                                    <Picker
+                                        style={{ width: 300, borderWidth: 0.5 }}
+                                        selectedValue={selectedValue}
+                                        onValueChange={handleValueChange}
+                                        itemStyle={styles.pickerItem}
+                                    >
+                                        {category.map((item, index) => {
+                                            return (
+                                                <Picker.Item
+                                                    label={item.name}
+                                                    value={item._id}
+                                                    key={index}
+                                                />
+                                            );
+                                        })}
+                                    </Picker>
+                                </View>
+                            </View>
+
+
+
+
+                            <View>
+                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ngày:</Text>
+                                <View style={{ width: '65%', flexDirection: 'row', borderWidth: 1, borderRadius: 5, height: 40, padding: 8, marginBottom: 10 }}>
+                                    <Text style={{ width: 250, marginRight: 10 }}>{currentdate}</Text>
+                                    {!isPickerShow && (
+                                        <View style={styles.btnContainer}>
+                                            <TouchableOpacity onPress={showPicker}><Icon
+                                                name='calendar'
+                                                size={20}></Icon></TouchableOpacity>
+
+                                        </View>
+                                    )}
+
+                                    {/* The date picker */}
+                                    {isPickerShow && (
+                                        <DateTimePicker
+                                            value={date}
+                                            mode={'date'}
+                                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                            is24Hour={true}
+                                            onChange={onChange}
+                                            style={styles.datePicker}
+                                        />
+                                    )}
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', marginRight: 160, marginBottom: 20 }}>
+                                <Text style={{ marginRight: 20, textAlign: 'left', fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Khoản Chi?</Text>
+                                <Checkbox style={{ height: 20 }} value={isChecked} onValueChange={setChecked} />
+                            </View>
+                            <View style={{flexDirection:'row',justifyContent: 'space-evenly', flex: 1, width: '100%', alignItems: 'center' }}>           
+                            <Pressable
+                                style={[styles.button, styles.buttonClose1]}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Text style={styles.textStyle}>Cancel</Text>
+                            </Pressable>          
+                            {isChecked == true ? <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => handleAdd()}
+                            >
+                                <Text style={styles.textStyle}>Thêm Giao Dịch Chi</Text>
+                            </Pressable> : <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => handleAdd()}
+                            >
+                                <Text style={styles.textStyle}>Thêm Giao Dịch Thu</Text>
+                            </Pressable>}
+                            </View> 
+
+
+
+
+                        </View>
+                    </View>
+                </Modal>
+
+
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={updatemodalVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setupdateModalVisible(!updatemodalVisible);
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', marginBottom: 15 }}>Thêm Giao Dịch</Text>
+
+
+                            <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
+                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Tiêu đề:</Text>
                                 <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)}></TextInput>
                             </View>
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Số Tiền:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập số tiền' value={price} onChangeText={text => setprice(text)}></TextInput>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập số tiền' value={price.toString()} onChangeText={text => setprice(text)}></TextInput>
                             </View>
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ghi chú:</Text>
@@ -640,109 +767,6 @@ const Khoanchi = ({ navigation }) => {
                             </View>
 
 
-                            {isChecked == true ? <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => { addRecord(); UpdateBalance1() }}
-                            >
-                                <Text style={styles.textStyle}>Thêm Giao Dịch Chi</Text>
-                            </Pressable> : <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => { addRecord(); UpdateBalance() }}
-                            >
-                                <Text style={styles.textStyle}>Thêm Giao Dịch Thu</Text>
-                            </Pressable>}
-
-
-
-
-                        </View>
-                    </View>
-                </Modal>
-
-
-
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={updatemodalVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                        setupdateModalVisible(!updatemodalVisible);
-                    }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', marginBottom: 15 }}>Sửa Giao Dịch</Text>
-
-
-                            <View style={{ width: '100%', alignContent: 'center' }}>
-                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Tiêu đề:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)}></TextInput>
-                            </View>
-                            <View style={{ width: '100%', alignContent: 'center' }}>
-                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Số Tiền:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập số tiền' value={price} onChangeText={text => setprice(text)}></TextInput>
-                            </View>
-                            <View style={{ width: '100%', alignContent: 'center' }}>
-                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ghi chú:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập ghi chú' value={description} onChangeText={text => setdescription(text)}></TextInput>
-                            </View>
-
-                            <View style={{ width: '100%', alignContent: 'center', marginBottom: 10 }}>
-                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Loại Giao Dịch:</Text>
-                                <View style={{ borderWidth: 0.5, width: '60%', height: 50, borderRadius: 5 }}>
-                                    <Picker
-                                        style={{ width: 300, borderWidth: 0.5 }}
-                                        selectedValue={selectedValue}
-                                        onValueChange={handleValueChange}
-                                        itemStyle={styles.pickerItem}
-                                    >
-                                        {category.map((item, index) => {
-                                            return (
-                                                <Picker.Item
-                                                    label={item.name}
-                                                    value={item._id}
-                                                    key={index}
-                                                />
-                                            );
-                                        })}
-                                    </Picker>
-                                </View>
-                            </View>
-
-
-
-
-                            <View>
-                                <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ngày:</Text>
-                                <View style={{ width: '65%', flexDirection: 'row', borderWidth: 1, borderRadius: 5, height: 40, padding: 8, marginBottom: 10 }}>
-                                    <Text style={{ width: 250, marginRight: 10 }}>{currentdate}</Text>
-                                    {!isPickerShow && (
-                                        <View style={styles.btnContainer}>
-                                            <TouchableOpacity onPress={showPicker}><Icon
-                                                name='calendar'
-                                                size={20}></Icon></TouchableOpacity>
-
-                                        </View>
-                                    )}
-
-                                    {/* The date picker */}
-                                    {isPickerShow && (
-                                        <DateTimePicker
-                                            value={date}
-                                            mode={'date'}
-                                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                            is24Hour={true}
-                                            onChange={onChange}
-                                            style={styles.datePicker}
-                                        />
-                                    )}
-                                </View>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-                                <Text style={{ marginRight: 20, textAlign: 'left', fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Khoản Chi?</Text>
-                                <Checkbox style={{ height: 20 }} value={isChecked} onValueChange={setChecked} />
-                            </View>
-
 
                             {isChecked == true ? <Pressable
                                 style={[styles.button, styles.buttonClose]}
@@ -799,6 +823,21 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: 'bold'
     },
+    deletebox: {
+        flex: 1,
+        backgroundColor: 'red',
+        justifyContent: 'center',
+        width: 100,
+        height: 148,
+        marginTop: 10,
+        elevation: 5,
+        marginLeft: 10,
+        marginRight: 10,
+        alignContent: 'center',
+        alignItems: 'center',
+
+
+    },
     appButtonContainer: {
 
         width: 160,
@@ -848,15 +887,21 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     button: {
-        borderRadius: 20,
+        marginTop:10,
+        borderRadius: 10,
         padding: 10,
         elevation: 2,
+        height:40,
+        width:200
     },
     buttonOpen: {
         backgroundColor: '#F194FF',
     },
     buttonClose: {
         backgroundColor: '#2196F3',
+    },
+    buttonClose1: {
+        backgroundColor: 'red',
     },
     textStyle: {
         color: 'white',
