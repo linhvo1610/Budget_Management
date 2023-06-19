@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, TextInput, Text, View, StyleSheet, TouchableHighlight, ImageBackground, StatusBar, TouchableOpacity, FlatList, Image, Share, Modal, ScrollView, RefreshControl, Alert, Pressable } from 'react-native'
+import { Button, TextInput, Text, View, StyleSheet, TouchableHighlight, ImageBackground, StatusBar, TouchableOpacity, FlatList, Image, Share, Modal, ScrollView, RefreshControl, Alert,SafeAreaView, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,12 +10,14 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import Checkbox from 'expo-checkbox';
-
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 
 
 import { API } from './API';
+import CurrentMonth from './CurrentMonth';
+import TopNav from './TopNav';
 var dem = 0;
 const ThongKe = ({ navigation }) => {
     const [reloading, setreloading] = useState(false)
@@ -132,31 +134,31 @@ const ThongKe = ({ navigation }) => {
     const sort = () => {
 
         var date = new Date();
-        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime() ;
-        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime() ;
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime();
         var first = date.getDate() - date.getDay(); // First day is the day of the month - the day of the week
         var last = first + 6; // last day is the first day + 6
 
         var firstDayofWeek = new Date(date.setDate(first)).toUTCString();
         var lastdayOfWeek = new Date(date.setDate(last)).toUTCString();
 
-        console.log("first day",firstDay)
-        console.log("last day",lastDay)
+        console.log("first day", firstDay)
+        console.log("last day", lastDay)
         if (data) {
             const newData = data.filter(item => {
-                const sdate= new Date(item.date).getTime();
-                
-                if (firstDay<= sdate && sdate <= lastDay) {
+                const sdate = new Date(item.date).getTime();
+
+                if (firstDay <= sdate && sdate <= lastDay) {
                     return true;
                 } return false;
 
 
             }
             )
-            console.log('new data',newData);
+            console.log('new data', newData);
             setdata(newData);
-           
-            
+
+
 
 
 
@@ -175,7 +177,7 @@ const ThongKe = ({ navigation }) => {
     }
 
     const getListrecord = () => {
-        if(!userId) return;
+        if (!userId) return;
         fetch(API.getrecord + userId)
 
             .then((data_res) => {
@@ -492,41 +494,20 @@ const ThongKe = ({ navigation }) => {
     }
 
 
+    const ThongKe = createBottomTabNavigator();
 
 
     StatusBar.setHidden(true)
     return (
-        <View style={styles.container}>
+
+        <SafeAreaView style={{flex: 1}}>
+            
+            <Text style={{marginBottom:5,backgroundColor:'white'}}>Thống kê</Text>
+            <TopNav ></TopNav>
+        </SafeAreaView>
 
 
 
-            <Text style={styles.status}>THỐNG KÊ</Text>
-            <Button title='sort' onPress={()=>sort()}></Button>
-
-
-
-
-
-
-            <View style={{ width: "100%", height: 800 }}>
-                {isLoading ? <ActivityIndicator /> : (<FlatList refreshControl={
-                    <RefreshControl refreshing={reloading}
-                        onRefresh={reloadData} />}
-                    data={data}
-                    renderItem={renderItem}
-                    keyExtractor={item => `key-${item._id}`}>
-                </FlatList>
-                )}
-
-            </View>
-
-
-
-
-
-
-
-        </View>
     )
 }
 export default ThongKe;
