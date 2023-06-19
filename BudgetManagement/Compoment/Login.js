@@ -10,8 +10,8 @@ import { useState } from 'react';
 const Login = (props) => {
     const [username, setusername] = useState('');
     const [password, setpassword] = useState('');
-    const [status, setstatus] = useState('');
     const [data, setdata] = useState()
+
 
     const dologin = () => {
         if (username.length == 0) {
@@ -23,12 +23,13 @@ const Login = (props) => {
             // thông báo:
             alert("Chưa nhập password")
             return;
-        }
+        }       
         fetch(API.login+username)
             .then((response) => 
                 response.json())
+                
             .then(async (json) => {
-
+                console.log('login',API.login+username);
                 console.log(json.data);
                 if (json.data.length != 1) {
                     alert("Tài Khoản hoặc mật khẩu sai");
@@ -85,10 +86,10 @@ const Login = (props) => {
             </View>
             <View style={{ alignItems: 'center' }}>
 
-                <TouchableOpacity style={{ marginTop: 20, marginBottom: 10, width: 250, backgroundColor: '#ff8c00', height: 30, borderRadius: 10, }}>
-                    <Text style={{ textAlign: 'center', marginTop: 5, color: 'white', fontWeight: 'bold' }} onPress={() => dologin()} >LOGIN</Text>
+                <TouchableHighlight style={{ marginTop: 20, marginBottom: 10, width: 250, backgroundColor: '#ff8c00', height: 30, borderRadius: 10, }}>
+                    <Text style={{ textAlign: 'center', marginTop: 5, color: 'white', fontWeight: 'bold' }} onPress={dologin} >LOGIN</Text>
 
-                </TouchableOpacity>
+                </TouchableHighlight>
                
             </View>
             <View style={{ marginTop: 15, alignItems: 'center',flex:1,alignItems:'center' }}>

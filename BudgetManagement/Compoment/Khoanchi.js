@@ -160,7 +160,7 @@ const Khoanchi = ({ navigation }) => {
         }
     }
     const getcategory = () => {
-        fetch('http://192.168.2.140:3000/api/category')
+        fetch(API.getcategory)
             .then(res => res.json())
             .then(result => {
                 console.log(result);
