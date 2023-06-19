@@ -77,7 +77,7 @@ const Home = ({ navigation }) => {
                     let parsed = JSON.parse(value)
                     setinformation(parsed);
                     setuserId(parsed._id);
-                    console.log('userid',userId);
+                    console.log('userid', userId);
                 }
             } catch (e) {
                 // error reading value
@@ -90,18 +90,23 @@ const Home = ({ navigation }) => {
 
         return () => {
         }
-    }, [information._id,balance,userId])
+    }, [information._id, balance, userId, newbalance])
+    
+
     const getBalance = () => {
         if (!userId) return;
+        console.log('LogUpdate', API.getbalance + userId);
         fetch(API.getbalance + userId)
             .then((response) => {
                 return response.json();
+
             })
             .then(async (data_json) => {
                 if (data_json.data) {
                     let objB = data_json.data[0];
                     console.log('log data' + objB);
                     setbalance(objB.balance);
+                    setid(objB._id)
                     try {
                         await AsyncStorage.setItem("balance", JSON.stringify(objB));
                         console.log("log async", objB);
@@ -157,6 +162,8 @@ const Home = ({ navigation }) => {
             balance: +newbalance + +balance,
         }
         console.warn("item", item)
+        console.log('loiiiiiii',API.updatebalance + id);
+        if (!id) return;
         fetch(API.updatebalance + id, {
             method: 'PUT',
             headers: { // config data
@@ -173,10 +180,13 @@ const Home = ({ navigation }) => {
     const chuyentr = () => {
         navigation.navigate('Khoanchi');
     }
+    const infor = () => {
+        navigation.navigate('Information');
+    }
 
     const getListrecord = () => {
         if (!information._id) return;
-        fetch(API.getrecord +information._id)
+        fetch(API.getrecord + information._id)
 
             .then((data_res) => {
                 return data_res.json();
@@ -192,10 +202,10 @@ const Home = ({ navigation }) => {
                     setcategory(newData[0].id_cat.name);
                     setdate(newData[0].date);
                     setis_expense(newData[0].is_expense);
-                    console.log('title',title);
-                    console.log('image',image);
-                    console.log('cat',category);
-                    console.log('date',date);
+                    console.log('title', title);
+                    console.log('image', image);
+                    console.log('cat', category);
+                    console.log('date', date);
                 }
 
 
@@ -205,6 +215,12 @@ const Home = ({ navigation }) => {
                 // nếu xảy ra lỗi thì log lỗi
                 console.log(err);
             }).finally(() => setisLoading(false));
+
+    }
+    function handleupdatebalance (){
+        UpdateBalance();
+        setupdateModalVisible(false);
+        getBalance()
 
     }
 
@@ -229,9 +245,12 @@ const Home = ({ navigation }) => {
                 .then((response) => {
                     console.log(response.status);
                     getListrecord()
+                    getData();
+                    getBalance();
                     // nếu status là 200 thì là xóa thành công
                     if (response.status == 200)
                         alert("Xóa thành công");
+                    
 
                 })
                 .catch((err) => {  // catch để bắt lỗi ngoại lệ
@@ -285,58 +304,58 @@ const Home = ({ navigation }) => {
             <ScrollView>
                 {item.is_expense == false ?
 
-                  
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+                    <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
 
 
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+                        <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
 
-                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
-                                <Image style={{
-                                    width: 40, height: 40, marginRight: 10
-                                }} source={{
-                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
-                                }} ></Image>
-                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
-                                <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
-
-
-                            </View>
-
-
-
-
-
-
-
+                        <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                            <Image style={{
+                                width: 40, height: 40, marginRight: 10
+                            }} source={{
+                                uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                            }} ></Image>
+                            <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                            <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
 
 
                         </View>
-                   
+
+
+
+
+
+
+
+
+
+                    </View>
+
                     :
 
-                   
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
-                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
-                                <Image style={{
-                                    width: 40, height: 40, marginRight: 10
-                                }} source={{
-                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
-                                }} ></Image>
-                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
-                                <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+                    <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
-
-                            </View>
+                        <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+                        <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                            <Image style={{
+                                width: 40, height: 40, marginRight: 10
+                            }} source={{
+                                uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                            }} ></Image>
+                            <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                            <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
 
 
+                        </View>
 
-                        </View>}
+
+
+                    </View>}
 
 
 
@@ -355,8 +374,10 @@ const Home = ({ navigation }) => {
         <View>
             <View style={{ backgroundColor: '#58fcf2', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, elevation: 2 }}>
                 <View style={styles.ngang}>
-                  
+
+                    <TouchableOpacity onPress={infor}>
                         <Image style={styles.img} source={require('../assets/meme.jpg')} />
+                    </TouchableOpacity>
 
                     <Text style={{ fontSize: 25, fontWeight: 'bold', marginTop: 20, color: 'black' }}> Welcome, {information.username} </Text>
 
@@ -384,68 +405,68 @@ const Home = ({ navigation }) => {
 
                 </View>
             </View>
-            <View style={{ flexDirection: 'row',margin:10}}>
-                  <Text style={{fontSize: 16, lineHeight: 30, color:'grey',fontWeight:'bold' }}>Giao dịch mới nhất</Text>
-                  <TouchableOpacity style={{ flex:1}} onPress={chuyentr}>
-                  <Text style={{ flex:1, fontSize: 16, lineHeight: 30, color:'green', textAlign:'right',fontWeight:'bold' }}>Xem tất cả giao dịch</Text>
-                  </TouchableOpacity>
-               </View>
+            <View style={{ flexDirection: 'row', margin: 10 }}>
+                <Text style={{ fontSize: 16, lineHeight: 30, color: 'grey', fontWeight: 'bold' }}>Giao dịch mới nhất</Text>
+                <TouchableOpacity style={{ flex: 1 }} onPress={chuyentr}>
+                    <Text style={{ flex: 1, fontSize: 16, lineHeight: 30, color: 'green', textAlign: 'right', fontWeight: 'bold' }}>Xem tất cả giao dịch</Text>
+                </TouchableOpacity>
+            </View>
 
             <ScrollView>
                 {is_expense == false ?
 
-                  
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+                    <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
 
 
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(date)}</Text>
+                        <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{title}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(date)}</Text>
 
-                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
-                                <Image style={{
-                                    width: 40, height: 40, marginRight: 10
-                                }} source={{
-                                    uri: "http://192.168.102.12:8000" + image,
-                                }} ></Image>
-                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {category}</Text>
-                                <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
-
-
-                            </View>
-
-
-
-
-
-
-
+                        <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                            <Image style={{
+                                width: 40, height: 40, marginRight: 10
+                            }} source={{
+                                uri: "http://192.168.1.8:8000" + image,
+                            }} ></Image>
+                            <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {category}</Text>
+                            <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
 
 
                         </View>
-                   
+
+
+
+
+
+
+
+
+
+                    </View>
+
                     :
 
-                   
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(date)}</Text>
-                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
-                                <Image style={{
-                                    width: 40, height: 40, marginRight: 10
-                                }} source={{
-                                    uri: "http://192.168.102.12:8000" + image,
-                                }} ></Image>
-                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {category}</Text>
-                                <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
+                    <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
-
-                            </View>
+                        <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{title}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(date)}</Text>
+                        <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                            <Image style={{
+                                width: 40, height: 40, marginRight: 10
+                            }} source={{
+                                uri: "http://192.168.1.8:8000" + image,
+                            }} ></Image>
+                            <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {category}</Text>
+                            <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
 
 
+                        </View>
 
-                        </View>}
+
+
+                    </View>}
 
 
 
@@ -488,7 +509,7 @@ const Home = ({ navigation }) => {
                         <TextInput placeholder="Cập nhật số dư" placeholderTextColor='black' value={newbalance} onChangeText={text => setnewbalance(text)}></TextInput>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => UpdateBalance()}>
+                            onPress={() => handleupdatebalance()}>
                             <Text style={styles.textStyle}>Update</Text>
                         </Pressable>
                     </View>
