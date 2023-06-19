@@ -273,7 +273,6 @@ const Khoanchi = ({ navigation }) => {
         let item = {
             id: idrecord,
             title: title,
-
             description: description,
             id_cat: selectedValue,
             id_user: userId,

@@ -116,7 +116,12 @@ const Home = ({ navigation }) => {
 
             })
     }
+    const handleupdatebalance=()=>{
+        UpdateBalance();
+        setupdateModalVisible(false);
+        getListrecord();
 
+    }
     const addBalance = () => {
         //1. Chuẩn bị dữ liệu:
 
