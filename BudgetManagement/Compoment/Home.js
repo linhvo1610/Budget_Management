@@ -90,7 +90,7 @@ const Home = ({ navigation }) => {
 
         return () => {
         }
-    }, [information._id,balance])
+    }, [information._id,balance,userId])
     const getBalance = () => {
         if (!userId) return;
         fetch(API.getbalance + userId)
@@ -125,7 +125,7 @@ const Home = ({ navigation }) => {
             balance: addbalance,
         }
         //2. Gọi hàm fetch
-        fetch('http:192.168.0.104:8000/api/balance', {
+        fetch(API.addbalance, {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
