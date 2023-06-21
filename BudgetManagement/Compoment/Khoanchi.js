@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, TextInput, Text, View, StyleSheet, TouchableHighlight, ImageBackground, StatusBar, TouchableOpacity, FlatList, Image, Share, Modal, ScrollView, RefreshControl, Alert, Pressable, Animated } from 'react-native'
+import { Button, TextInput, Text, View, StyleSheet, TouchableHighlight, ImageBackground, StatusBar, TouchableOpacity, FlatList, Share, Modal, ScrollView, RefreshControl, Alert, Pressable, Animated } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,6 +10,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import Checkbox from 'expo-checkbox';
+import { Image } from 'react-native';
 
 
 
@@ -34,6 +35,7 @@ const Khoanchi = ({ navigation }) => {
 
 
     });
+
 
     const [data, setdata] = useState([]);
     const [id, setid] = useState();
@@ -135,12 +137,13 @@ const Khoanchi = ({ navigation }) => {
         }
 
         getData();
-        getListrecord();
+        getListrecord()
         getcategory();
+        
         return () => {
 
         }
-    }, [userId, idbalance])
+    }, [userId, idbalance,data])
     const sort = () => {
         if (data) {
             const newData = data.filter(item => {
@@ -156,6 +159,7 @@ const Khoanchi = ({ navigation }) => {
             setdata(newData)
         }
     }
+    
     const getcategory = () => {
         fetch(API.getcategory)
             .then(res => res.json())
@@ -261,11 +265,16 @@ const Khoanchi = ({ navigation }) => {
                 console.log(response.status);
                 if (response.status == 201)
                     alert("thêm thành công");
+                getData();
+                getListrecord();
+                getcategory();
+
             })
             .catch((err) => {  // catch để bắt lỗi ngoại lệ
                 console.log(err);
             });
     }
+
     function UpdateRecord() {
         let item = {
             id: idrecord,
@@ -329,10 +338,10 @@ const Khoanchi = ({ navigation }) => {
             })
                 .then((response) => {
                     console.log(response.status);
-                    getListrecord()
                     // nếu status là 200 thì là xóa thành công
                     if (response.status == 200)
                         alert("Xóa thành công");
+                        
 
                 })
                 .catch((err) => {  // catch để bắt lỗi ngoại lệ
@@ -355,6 +364,7 @@ const Khoanchi = ({ navigation }) => {
                 body: JSON.stringify(obj)
             }).then((result) => {
                 result.json().then((resp) => {
+                    
                     console.warn(resp)
                 })
             })
@@ -377,6 +387,8 @@ const Khoanchi = ({ navigation }) => {
                 body: JSON.stringify(obj)
             }).then((result) => {
                 result.json().then((resp) => {
+                    getListrecord();
+                    getcategory()
                     console.warn(resp)
                 })
             })
@@ -404,6 +416,7 @@ const Khoanchi = ({ navigation }) => {
             ]);
 
         }
+
         function Selectrecord() {
             setidrecord(item._id);
             settitle(item.title);
@@ -411,10 +424,11 @@ const Khoanchi = ({ navigation }) => {
             setdescription(item.description);
             setidbalance(item.id_balance);
             setuserId(item.id_user);
-            setSelectedValue(item.id_cat);
+            setSelectedValue(item.id_cat._id);
             setChecked(item.is_expense);
-
+            console.log('update:', selectedValue);
         }
+
         const formatDate = (dateString) => {
             const date = new Date(dateString);
             return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -467,14 +481,6 @@ const Khoanchi = ({ navigation }) => {
 
 
                                     </View>
-
-
-
-
-
-
-
-
 
                                 </View>
                             </TouchableOpacity>
@@ -534,6 +540,7 @@ const Khoanchi = ({ navigation }) => {
 
 
             <View style={{ width: "100%", height: 800 }}>
+
                 {isLoading ? <ActivityIndicator /> : (<FlatList refreshControl={
                     <RefreshControl refreshing={reloading}
                         onRefresh={reloadData} />}
@@ -543,7 +550,9 @@ const Khoanchi = ({ navigation }) => {
                 </FlatList>
                 )}
 
+
             </View>
+
             <View style={{
                 width: "100%",
                 position: "absolute",
@@ -607,6 +616,7 @@ const Khoanchi = ({ navigation }) => {
                                         selectedValue={selectedValue}
                                         onValueChange={handleValueChange}
                                         itemStyle={styles.pickerItem}
+
                                     >
                                         {category.map((item, index) => {
                                             return (
@@ -654,25 +664,25 @@ const Khoanchi = ({ navigation }) => {
                                 <Text style={{ marginRight: 20, textAlign: 'left', fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Khoản Chi?</Text>
                                 <Checkbox style={{ height: 20 }} value={isChecked} onValueChange={setChecked} />
                             </View>
-                            <View style={{flexDirection:'row',justifyContent: 'space-evenly', flex: 1, width: '100%', alignItems: 'center' }}>           
-                            <Pressable
-                                style={[styles.button, styles.buttonClose1]}
-                                onPress={() => setModalVisible(false)}
-                            >
-                                <Text style={styles.textStyle}>Cancel</Text>
-                            </Pressable>          
-                            {isChecked == true ? <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => handleAdd()}
-                            >
-                                <Text style={styles.textStyle}>Thêm Giao Dịch Chi</Text>
-                            </Pressable> : <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => handleAdd()}
-                            >
-                                <Text style={styles.textStyle}>Thêm Giao Dịch Thu</Text>
-                            </Pressable>}
-                            </View> 
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', flex: 1, width: '100%', alignItems: 'center' }}>
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose1]}
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={styles.textStyle}>Cancel</Text>
+                                </Pressable>
+                                {isChecked == true ? <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => handleAdd()}
+                                >
+                                    <Text style={styles.textStyle}>Thêm Giao Dịch Chi</Text>
+                                </Pressable> : <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => handleAdd()}
+                                >
+                                    <Text style={styles.textStyle}>Thêm Giao Dịch Thu</Text>
+                                </Pressable>}
+                            </View>
 
 
 
@@ -716,6 +726,7 @@ const Khoanchi = ({ navigation }) => {
                                         selectedValue={selectedValue}
                                         onValueChange={handleValueChange}
                                         itemStyle={styles.pickerItem}
+
                                     >
                                         {category.map((item, index) => {
                                             return (
@@ -885,12 +896,12 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     button: {
-        marginTop:10,
+        marginTop: 10,
         borderRadius: 10,
         padding: 10,
         elevation: 2,
-        height:40,
-        width:200
+        height: 40,
+        width: 200
     },
     buttonOpen: {
         backgroundColor: '#F194FF',
