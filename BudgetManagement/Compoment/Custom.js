@@ -58,7 +58,7 @@ const Custom = () => {
     const [idrecord, setidrecord] = useState()
     const [pricesum, setpricesum] = useState([]);
 
-    console.log("sd",startdate);
+    console.log("sd", startdate);
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
@@ -81,6 +81,18 @@ const Custom = () => {
         setDate(value);
         if (Platform.OS === 'android') {
             setIsPickerShow(false);
+        }
+    };
+    const onChange1 = (event, value) => {
+        setstartdate(value);
+        if (Platform.OS === 'android') {
+            setIsPickerShow1(false);
+        }
+    };
+    const onChange2 = (event, value) => {
+        setenddate(value);
+        if (Platform.OS === 'android') {
+            setIsPickerShow2(false);
         }
     };
 
@@ -122,7 +134,6 @@ const Custom = () => {
         }
 
         getData();
-        getListrecord();
         getcategory();
 
         return () => {
@@ -130,10 +141,12 @@ const Custom = () => {
         }
     }, [userId])
 
-    
+
 
     const getcategory = () => {
-        fetch('http://192.168.0.104:8000/api/category')
+
+        fetch('http://192.168.102.12:8000/api/category')
+
             .then(res => res.json())
             .then(result => {
                 console.log(result);
@@ -143,7 +156,7 @@ const Custom = () => {
 
             })
     }
-
+    
     const getListrecord = () => {
         if (!userId) return;
         fetch(API.getrecord + userId)
@@ -154,8 +167,8 @@ const Custom = () => {
             .then((data_json) => {
                 if (data_json.data) {
                     var date = new Date();
-                    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
-                    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime();
+                    var firstDay = startdate.getTime();
+                    var lastDay = enddate.getTime();
                     var first = date.getDate() - date.getDay(); // First day is the day of the month - the day of the week
                     var last = first + 6; // last day is the first day + 6
 
@@ -255,6 +268,7 @@ const Custom = () => {
 
 
 
+
     const addRecord = () => {
         //1. Chuẩn bị dữ liệu:
 
@@ -286,12 +300,6 @@ const Custom = () => {
                 setprice(0);
                 setdescription(0);
 
-
-            })
-            .catch((err) => {  // catch để bắt lỗi ngoại lệ
-                console.log(err);
-            });
-    }
 
     renderItem = ({ item, index }) => {
 
@@ -409,13 +417,14 @@ const Custom = () => {
 
             <ScrollView>
                 {item.is_expense == false ?
-                  
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+                    <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
 
 
-                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+
+                        <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
 
                             <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
                                 <Image style={{
@@ -427,19 +436,25 @@ const Custom = () => {
                                 <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
 
 
-                            </View>
-
-                           
-
-
-
-
-
+                        <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                            <Image style={{
+                                width: 40, height: 40, marginRight: 10
+                            }} source={{
+                                uri: "http://192.168.102.12:8000" + item.id_cat.image,
+                            }} ></Image>
+                            <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                            <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
 
 
                         </View>
-                     :
-                        <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+
+
+
+
+
+
+
 
                             <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
                             <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
@@ -453,14 +468,30 @@ const Custom = () => {
                                 <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >       {item.price} ₫</Text>
 
 
-                            </View>
+                    </View>
+                    :
+                    <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
+
+                        <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+                        <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                            <Image style={{
+                                width: 40, height: 40, marginRight: 10
+                            }} source={{
+                                uri: "http://192.168.102.12:8000" + item.id_cat.image,
+                            }} ></Image>
+                            <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                            <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >       {item.price} ₫</Text>
+
+
+                        </View>
 
 
 
 
 
 
-                        </View>}
+                    </View>}
 
 
             </ScrollView>
@@ -494,14 +525,14 @@ const Custom = () => {
                             placement="top"
                         >
                             <TouchableOpacity onPress={() => setTip1(true)} style={{ width: '100%' }} >
-                            <Text style={{ textAlign: 'center', fontSize: 17, fontWeight: 'bold' }}>{spend}</Text>
+                                <Text style={{ textAlign: 'center', fontSize: 17, fontWeight: 'bold' }}>{spend}</Text>
 
                             </TouchableOpacity>
 
 
 
                         </Tooltip>
-                        
+
                         <Text style={{ textAlign: 'center' }}>Tổng đã chi</Text>
                     </View>
                     <TouchableOpacity>
@@ -532,8 +563,68 @@ const Custom = () => {
                 </View>
 
             </View>
-            <View style={{alignContent:'flex-start',justifyContent:'flex-start',marginTop:10}}>
-                <Text style={{color:'grey',marginLeft:5,fontWeight:'600'}}>Tất cả giao dịch trong tháng</Text>
+            <View style={{ alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10 }}>
+                <Text style={{ color: 'grey', marginLeft: 5, fontWeight: '600' }}>Chọn khoảng thời gian</Text>
+            </View>
+
+            <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'space-evenly', padding: 10 }}>
+                <View style={{ width: '30%', flexDirection: 'row', borderWidth: 1, borderRadius: 5, height: 40, padding: 8, marginBottom: 10, backgroundColor: 'white' }}>
+                    <Text style={{ width: 100, marginRight: 10 }}>{startdate.toDateString()}</Text>
+                    {!isPickerShow1 && (
+                        <View style={styles.btnContainer}>
+                            <TouchableOpacity onPress={showPicker1}><Icon
+                                name='calendar'
+                                size={20}></Icon></TouchableOpacity>
+
+                        </View>
+                    )}
+
+                    {/* The date picker */}
+                    {isPickerShow1 && (
+                        <DateTimePicker
+                            value={startdate}
+                            mode={'date'}
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                            is24Hour={true}
+                            onChange={onChange1}
+                            style={styles.datePicker}
+                        />
+                    )}
+                </View>
+                <View style={{ width: '30%', flexDirection: 'row', borderWidth: 1, borderRadius: 5, height: 40, padding: 8, marginBottom: 10, backgroundColor: 'white' }}>
+                    <Text style={{ width: 100, marginRight: 10 }}>{enddate.toDateString()}</Text>
+                    {!isPickerShow2 && (
+                        <View style={styles.btnContainer}>
+                            <TouchableOpacity onPress={showPicker2}><Icon
+                                name='calendar'
+                                size={20}></Icon></TouchableOpacity>
+
+                        </View>
+                    )}
+
+                    {/* The date picker */}
+                    {isPickerShow2 && (
+                        <DateTimePicker
+                            value={enddate}
+                            mode={'date'}
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                            is24Hour={true}
+                            onChange={onChange2}
+                            style={styles.datePicker}
+                        />
+                    )}
+                </View>
+            </View>
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                <TouchableOpacity style={{backgroundColor:'green',width:80,height:40,borderRadius:6}} onPress={()=>getListrecord()}>
+                    <Text style={{justifyContent:'center',alignItems:'center',alignSelf:'center',color:'white',fontWeight:'600',fontSize:16,padding:6}}>Lọc</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={{ alignContent: 'flex-start', justifyContent: 'flex-start', marginTop: 10 }}>
+                <Text style={{ color: 'grey', marginLeft: 5, fontWeight: '600' }}>Tất cả giao dịch trong tháng</Text>
             </View>
             <View style={{ width: "100%", height: 600 }}>
                 {isLoading ? <ActivityIndicator /> : (<FlatList refreshControl={
