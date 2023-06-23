@@ -39,8 +39,8 @@ const Khoanchi = ({ navigation }) => {
 
     const [data, setdata] = useState([]);
     const [id, setid] = useState();
-    const [title, settitle] = useState();
-    const [description, setdescription] = useState();
+    const [title, settitle] = useState('');
+    const [description, setdescription] = useState('');
     const [price, setprice] = useState(0);
     const [username, setusername] = useState();
     const [userId, setuserId] = useState();
@@ -61,7 +61,7 @@ const Khoanchi = ({ navigation }) => {
     const [idrecord, setidrecord] = useState();
 
 
-    console.log(date);
+    console.log('selected value', selectedValue);
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
@@ -139,30 +139,12 @@ const Khoanchi = ({ navigation }) => {
         getData();
         getListrecord()
         getcategory();
-        
+
         return () => {
 
         }
-    }, [userId, idbalance,data])
-    const sort = () => {
-        if (data) {
-            const newData = data.filter(item => {
-                if (startdate <= new Date(item.date) <= enddate) {
-                    return true;
-                } return false;
+    }, [userId, idbalance])
 
-
-            }
-
-
-            )
-            setdata(newData)
-
-
-
-        }
-    }
-    
     const getcategory = () => {
         fetch(API.getcategory)
             .then(res => res.json())
@@ -256,7 +238,7 @@ const Khoanchi = ({ navigation }) => {
 
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.1.8:8000/api/record', {
+        fetch('http://192.168.102.12:8000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
@@ -311,15 +293,32 @@ const Khoanchi = ({ navigation }) => {
         getListrecord();
         UpdateBalance();
     }
-    function handleAdd() {
-        addRecord();
-        getListrecord();
-        UpdateBalance();
-        setModalVisible(false);
-        settitle('');
-        setprice(0);
-        setdescription('');
+    const handlevalidate = () => {
+        if (title.length == 0) {
+            // thông báo:
+            alert("Chưa nhập tiêu đề")
+            return;
+        }
+        if (price == 0) {
+            alert("Vui lòng nhập số tiền")
+            return;
+        }
+        if (selectedValue == undefined) {
+            alert("Vui lòng chọn  loại chi tiêu")
+            return;
+        }
+        else {
+            addRecord();
+            getListrecord();
+            UpdateBalance();
+            setModalVisible(false);
+            settitle('');
+            setprice(0);
+            setdescription('');
+            setSelectedValue();
+        }
     }
+
     renderItem = ({ item, index }) => {
 
 
@@ -343,7 +342,7 @@ const Khoanchi = ({ navigation }) => {
                     // nếu status là 200 thì là xóa thành công
                     if (response.status == 200)
                         alert("Xóa thành công");
-                        
+
 
                 })
                 .catch((err) => {  // catch để bắt lỗi ngoại lệ
@@ -366,7 +365,7 @@ const Khoanchi = ({ navigation }) => {
                 body: JSON.stringify(obj)
             }).then((result) => {
                 result.json().then((resp) => {
-                    
+
                     console.warn(resp)
                 })
             })
@@ -475,7 +474,7 @@ const Khoanchi = ({ navigation }) => {
                                         <Image style={{
                                             width: 40, height: 40, marginRight: 10
                                         }} source={{
-                                            uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                                            uri: "http://192.168.102.12:8000" + item.id_cat.image,
                                         }} ></Image>
                                         <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                                         <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
@@ -499,7 +498,7 @@ const Khoanchi = ({ navigation }) => {
                                         <Image style={{
                                             width: 40, height: 40, marginRight: 10
                                         }} source={{
-                                            uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                                            uri: "http://192.168.102.12:8000" + item.id_cat.image,
                                         }} ></Image>
                                         <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                                         <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
@@ -674,12 +673,12 @@ const Khoanchi = ({ navigation }) => {
                                 </Pressable>
                                 {isChecked == true ? <Pressable
                                     style={[styles.button, styles.buttonClose]}
-                                    onPress={() => handleAdd()}
+                                    onPress={() => handlevalidate()}
                                 >
                                     <Text style={styles.textStyle}>Thêm Giao Dịch Chi</Text>
                                 </Pressable> : <Pressable
                                     style={[styles.button, styles.buttonClose]}
-                                    onPress={() => handleAdd()}
+                                    onPress={() => handlevalidate()}
                                 >
                                     <Text style={styles.textStyle}>Thêm Giao Dịch Thu</Text>
                                 </Pressable>}

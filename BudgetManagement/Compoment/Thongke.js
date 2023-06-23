@@ -165,7 +165,7 @@ const ThongKe = ({ navigation }) => {
         }
     }
     const getcategory = () => {
-        fetch('http://192.168.1.8:8000/api/category')
+        fetch('http://192.168.102.12:8000/api/category')
             .then(res => res.json())
             .then(result => {
                 console.log(result);
@@ -256,7 +256,7 @@ const ThongKe = ({ navigation }) => {
 
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.1.8:8000/api/record', {
+        fetch('http://192.168.102.12:8000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',

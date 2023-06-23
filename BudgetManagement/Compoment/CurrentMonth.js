@@ -173,7 +173,7 @@ const CurrentMonth = () => {
     })
 
     const getcategory = () => {
-        fetch('http://192.168.1.8:8000/api/category')
+        fetch('http://192.168.102.12:8000/api/category')
             .then(res => res.json())
             .then(result => {
                 console.log(result);
@@ -310,7 +310,7 @@ const CurrentMonth = () => {
 
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.1.8:8000/api/record', {
+        fetch('http://192.168.102.12:8000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
@@ -461,7 +461,7 @@ const CurrentMonth = () => {
                                 <Image style={{
                                     width: 40, height: 40, marginRight: 10
                                 }} source={{
-                                    uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
                                 }} ></Image>
                                 <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                                 <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
@@ -487,7 +487,7 @@ const CurrentMonth = () => {
                                 <Image style={{
                                     width: 40, height: 40, marginRight: 10
                                 }} source={{
-                                    uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                                    uri: "http://192.168.102.12:8000" + item.id_cat.image,
                                 }} ></Image>
                                 <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                                 <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >       {item.price} ₫</Text>
