@@ -17,6 +17,17 @@ const Resgister = (props) => {
   }
   const addUsers = () => {
     let obj = { username: username, email: email, password: pass, role:'User' };
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (email.length == 0) {
+      // thông báo:
+      alert("Chưa nhập email")
+      return;
+    }
+    if (reg.test(email) === false) {
+      alert('Email Không đúng định dạng');
+      return;
+    }
+
     if (username.length == 0) {
       // thông báo:
       alert("Chưa nhập username")
@@ -32,16 +43,8 @@ const Resgister = (props) => {
       alert("Mật khẩu không trùng nhau")
       return;
     }
-    if (email.length == 0) {
-      // thông báo:
-      alert("Chưa nhập email")
-      return;
-    }
-    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (reg.test(email) === false) {
-      alert('Email Không đúng định dạng');
-      return;
-    }
+    
+    
 
     fetch(API.register, {
       method: 'POST', 
@@ -76,7 +79,7 @@ const Resgister = (props) => {
 
   return (
     <View style={{ flex: 1, }}>
-      <View style={{ marginTop: 30, }}>
+      <View style={{ marginTop: 20, }}>
         <TouchableOpacity onPress={() => props.navigation.navigate('Login')}>
 
           <Image
@@ -95,19 +98,16 @@ const Resgister = (props) => {
       </View>
       <View style={{ alignItems: 'center' }}>
         <Image
-          style={{ width: 100, height: 100, margin: 15, }}
-          source={require('../assets/unnamed.png')
+          style={{width:350,height:280, margin: 15, }}
+          source={require('../assets/logo.png')
 
           }
 
         />
       </View>
 
-      <View style={{ marginTop: 30, alignItems: 'center', }}>
-        <Text style={{ color: '#ffa500', fontSize: 25, }}>Spending Management</Text>
-      </View>
 
-      <View style={{ marginTop: 30, alignItems: 'center', }}>
+      <View style={{ marginTop: 0, alignItems: 'center', }}>
         <TextInput style={styles.Textinput} placeholder='Email' placeholderTextColor='white' onChangeText={(txt) => { setemail(txt) }}  ></TextInput>
 
         <TextInput style={styles.Textinput} placeholder='Username' placeholderTextColor='white' onChangeText={(txt) => { setusername(txt) }}  ></TextInput>
