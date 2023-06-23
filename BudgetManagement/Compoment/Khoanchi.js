@@ -19,7 +19,7 @@ import { Image } from 'react-native';
 import { API } from './API';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 var dem = 0;
-const Khoanchi = ({ navigation }) => {
+const Khoanchi = (props) => {
     const [reloading, setreloading] = useState(false)
     const [counter, setcounter] = useState(dem)
     const reloadData = React.useCallback(() => {
@@ -35,7 +35,6 @@ const Khoanchi = ({ navigation }) => {
 
 
     });
-
 
     const [data, setdata] = useState([]);
     const [id, setid] = useState();
@@ -137,13 +136,12 @@ const Khoanchi = ({ navigation }) => {
         }
 
         getData();
-        getListrecord()
+        getListrecord();
         getcategory();
-        
         return () => {
 
         }
-    }, [userId, idbalance,data])
+    }, [userId, idbalance])
     const sort = () => {
         if (data) {
             const newData = data.filter(item => {
@@ -162,7 +160,6 @@ const Khoanchi = ({ navigation }) => {
 
         }
     }
-    
     const getcategory = () => {
         fetch(API.getcategory)
             .then(res => res.json())
@@ -256,7 +253,7 @@ const Khoanchi = ({ navigation }) => {
 
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.1.8:8000/api/record', {
+        fetch('http://192.168.1.39:8000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
@@ -268,16 +265,11 @@ const Khoanchi = ({ navigation }) => {
                 console.log(response.status);
                 if (response.status == 201)
                     alert("thêm thành công");
-                getData();
-                getListrecord();
-                getcategory();
-
             })
             .catch((err) => {  // catch để bắt lỗi ngoại lệ
                 console.log(err);
             });
     }
-
     function UpdateRecord() {
         let item = {
             id: idrecord,
@@ -341,10 +333,10 @@ const Khoanchi = ({ navigation }) => {
             })
                 .then((response) => {
                     console.log(response.status);
+                    getListrecord()
                     // nếu status là 200 thì là xóa thành công
                     if (response.status == 200)
                         alert("Xóa thành công");
-                        
 
                 })
                 .catch((err) => {  // catch để bắt lỗi ngoại lệ
@@ -367,7 +359,6 @@ const Khoanchi = ({ navigation }) => {
                 body: JSON.stringify(obj)
             }).then((result) => {
                 result.json().then((resp) => {
-                    
                     console.warn(resp)
                 })
             })
@@ -390,8 +381,6 @@ const Khoanchi = ({ navigation }) => {
                 body: JSON.stringify(obj)
             }).then((result) => {
                 result.json().then((resp) => {
-                    getListrecord();
-                    getcategory()
                     console.warn(resp)
                 })
             })
@@ -419,7 +408,6 @@ const Khoanchi = ({ navigation }) => {
             ]);
 
         }
-
         function Selectrecord() {
             setidrecord(item._id);
             settitle(item.title);
@@ -427,11 +415,10 @@ const Khoanchi = ({ navigation }) => {
             setdescription(item.description);
             setidbalance(item.id_balance);
             setuserId(item.id_user);
-            setSelectedValue(item.id_cat._id);
+            setSelectedValue(item.id_cat);
             setChecked(item.is_expense);
-            console.log('update:', selectedValue);
-        }
 
+        }
         const formatDate = (dateString) => {
             const date = new Date(dateString);
             return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -471,14 +458,13 @@ const Khoanchi = ({ navigation }) => {
 
                                     <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
                                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
-
                                     <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
                                         <Image style={{
                                             width: 40, height: 40, marginRight: 10
                                         }} source={{
-                                            uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                                            uri: "http://192.168.1.39:8000" + item.id_cat.image,
                                         }} ></Image>
-                                        <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                        <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} onPress={()=>{props.navigation.navigate('Chitiet',{item_update:item})}}> {item.id_cat.name}</Text>
                                         <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
 
 
@@ -500,7 +486,7 @@ const Khoanchi = ({ navigation }) => {
                                         <Image style={{
                                             width: 40, height: 40, marginRight: 10
                                         }} source={{
-                                            uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                                            uri: "http://192.168.1.39:8000" + item.id_cat.image,
                                         }} ></Image>
                                         <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                                         <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
@@ -542,7 +528,6 @@ const Khoanchi = ({ navigation }) => {
 
 
             <View style={{ width: "100%", height: 800 }}>
-
                 {isLoading ? <ActivityIndicator /> : (<FlatList refreshControl={
                     <RefreshControl refreshing={reloading}
                         onRefresh={reloadData} />}
@@ -552,9 +537,7 @@ const Khoanchi = ({ navigation }) => {
                 </FlatList>
                 )}
 
-
             </View>
-
             <View style={{
                 width: "100%",
                 position: "absolute",
@@ -618,7 +601,6 @@ const Khoanchi = ({ navigation }) => {
                                         selectedValue={selectedValue}
                                         onValueChange={handleValueChange}
                                         itemStyle={styles.pickerItem}
-
                                     >
                                         {category.map((item, index) => {
                                             return (
@@ -728,7 +710,6 @@ const Khoanchi = ({ navigation }) => {
                                         selectedValue={selectedValue}
                                         onValueChange={handleValueChange}
                                         itemStyle={styles.pickerItem}
-
                                     >
                                         {category.map((item, index) => {
                                             return (
@@ -927,4 +908,3 @@ const styles = StyleSheet.create({
         borderWidth: 1, height: 40, borderRadius: 5, marginBottom: 10, width: '60%', padding: 8
     }
 });
-
