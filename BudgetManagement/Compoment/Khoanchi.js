@@ -39,8 +39,8 @@ const Khoanchi = ({ navigation }) => {
 
     const [data, setdata] = useState([]);
     const [id, setid] = useState();
-    const [title, settitle] = useState();
-    const [description, setdescription] = useState();
+    const [title, settitle] = useState('');
+    const [description, setdescription] = useState('');
     const [price, setprice] = useState(0);
     const [username, setusername] = useState();
     const [userId, setuserId] = useState();
@@ -157,9 +157,6 @@ const Khoanchi = ({ navigation }) => {
 
             )
             setdata(newData)
-
-
-
         }
     }
     
@@ -240,6 +237,7 @@ const Khoanchi = ({ navigation }) => {
             })
         })
     }
+   
 
     const addRecord = () => {
         //1. Chuẩn bị dữ liệu:
@@ -256,7 +254,11 @@ const Khoanchi = ({ navigation }) => {
 
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.1.8:8000/api/record', {
+
+      
+           
+                
+        fetch('http://192.168.0.103:8000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
@@ -276,8 +278,8 @@ const Khoanchi = ({ navigation }) => {
             .catch((err) => {  // catch để bắt lỗi ngoại lệ
                 console.log(err);
             });
+    
     }
-
     function UpdateRecord() {
         let item = {
             id: idrecord,
@@ -308,19 +310,51 @@ const Khoanchi = ({ navigation }) => {
         })
     }
     function handleUpdate() {
-        UpdateRecord();
-        getListrecord();
-        UpdateBalance();
+        if (title == 0) {
+            // thông báo:
+            alert("Chưa nhập tiêu đề")
+            return;
+        }
+        if (price == 0) {
+            alert("Vui lòng nhập số tiền")
+            return;
+        }
+        if (selectedValue == undefined) {
+            alert("Vui lòng chọn  loại chi tiêu")
+            return;
+        }else{
+            UpdateRecord();
+            getListrecord();
+            UpdateBalance();
+        }
+      
     }
     function handleAdd() {
-        addRecord();
-        getListrecord();
-        UpdateBalance();
-        setModalVisible(false);
-        settitle('');
-        setprice(0);
-        setdescription('');
+        if (title == 0) {
+            // thông báo:
+            alert("Chưa nhập tiêu đề")
+            return;
+        }
+        if (price == 0) {
+            alert("Vui lòng nhập số tiền")
+            return;
+        }
+        if (selectedValue == undefined) {
+            alert("Vui lòng chọn  loại chi tiêu")
+            return;
+        }
+        else {
+            addRecord();
+            getListrecord();
+            UpdateBalance();
+            setModalVisible(false);
+            settitle('');
+            setprice(0);
+            setdescription('');
+            setSelectedValue();
+        }
     }
+   
     renderItem = ({ item, index }) => {
 
 
@@ -476,10 +510,11 @@ const Khoanchi = ({ navigation }) => {
                                         <Image style={{
                                             width: 40, height: 40, marginRight: 10
                                         }} source={{
-                                            uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                                            uri: "http://192.168.0.103:8000" + item.id_cat.image,
                                         }} ></Image>
                                         <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
-                                        <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+                                        <Text style={{ marginBottom: 5, color: 'green', flex: 3, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+                                       
 
 
                                     </View>
@@ -500,10 +535,10 @@ const Khoanchi = ({ navigation }) => {
                                         <Image style={{
                                             width: 40, height: 40, marginRight: 10
                                         }} source={{
-                                            uri: "http://192.168.1.8:8000" + item.id_cat.image,
+                                            uri: "http://192.168.0.103:8000" + item.id_cat.image,
                                         }} ></Image>
                                         <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
-                                        <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+                                        <Text style={{ marginBottom: 5, color: 'red', flex: 3, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
 
 
                                     </View>
@@ -600,7 +635,7 @@ const Khoanchi = ({ navigation }) => {
 
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Tiêu đề:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)} required></TextInput>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)} ></TextInput>
                             </View>
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Số Tiền:</Text>
@@ -710,15 +745,15 @@ const Khoanchi = ({ navigation }) => {
 
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Tiêu đề:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)}></TextInput>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)} required></TextInput>
                             </View>
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Số Tiền:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập số tiền' value={price.toString()} onChangeText={text => setprice(text)}></TextInput>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập số tiền' value={price.toString()} onChangeText={text => setprice(text)} required></TextInput>
                             </View>
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Ghi chú:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập ghi chú' value={description} onChangeText={text => setdescription(text)}></TextInput>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập ghi chú' value={description} onChangeText={text => setdescription(text)} required></TextInput>
                             </View>
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180, marginBottom: 10 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Loại Giao Dịch:</Text>
