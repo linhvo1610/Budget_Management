@@ -144,7 +144,9 @@ const Custom = () => {
 
 
     const getcategory = () => {
+
         fetch('http://192.168.102.12:8000/api/category')
+
             .then(res => res.json())
             .then(result => {
                 console.log(result);
@@ -266,6 +268,37 @@ const Custom = () => {
 
 
 
+
+    const addRecord = () => {
+        //1. Chuẩn bị dữ liệu:
+
+        let objrecord = {
+            title: title,
+            price: price,
+            description: description,
+            id_cat: selectedValue,
+            id_user: userId,
+            id_balance: idbalance,
+            is_expense: isChecked,
+            date: date,
+
+        }
+        //2. Gọi hàm fetch
+        fetch('http://192.168.0.104:8000/api/record', {
+            method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
+            headers: { // Định dạng dữ liệu gửi đi
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(objrecord) // chuyển đối tượng SP thành chuỗi JSON
+        })
+            .then((response) => {
+                console.log(response.status);
+                if (response.status == 201)
+                    alert("cập nhật thành công");
+                settitle('');
+                setprice(0);
+                setdescription(0);
 
 
     renderItem = ({ item, index }) => {
@@ -389,8 +422,19 @@ const Custom = () => {
 
 
 
+
                         <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
                         <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+
+                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                <Image style={{
+                                    width: 40, height: 40, marginRight: 10
+                                }} source={{
+                                    uri: "http://192.168.0.104:8000" + item.id_cat.image,
+                                }} ></Image>
+                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+
 
                         <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
                             <Image style={{
@@ -410,6 +454,18 @@ const Custom = () => {
 
 
 
+
+
+                            <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
+                            <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
+                                <Image style={{
+                                    width: 40, height: 40, marginRight: 10
+                                }} source={{
+                                    uri: "http://192.168.0.104:8000" + item.id_cat.image,
+                                }} ></Image>
+                                <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
+                                <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >       {item.price} ₫</Text>
 
 
                     </View>

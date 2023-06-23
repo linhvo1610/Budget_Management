@@ -306,6 +306,7 @@ const Home = ({ navigation }) => {
                         <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
                         <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
 
+
                         <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
                             <Image style={{
                                 width: 40, height: 40, marginRight: 10
@@ -314,6 +315,7 @@ const Home = ({ navigation }) => {
                             }} ></Image>
                             <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                             <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+
 
 
                         </View>
@@ -333,6 +335,7 @@ const Home = ({ navigation }) => {
 
                     <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
+
                         <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{item.title}</Text>
                         <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(item.date)}</Text>
                         <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
@@ -343,6 +346,7 @@ const Home = ({ navigation }) => {
                             }} ></Image>
                             <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                             <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
+
 
 
                         </View>
@@ -417,6 +421,7 @@ const Home = ({ navigation }) => {
                         <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{title}</Text>
                         <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(date)}</Text>
 
+
                         <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
                             <Image style={{
                                 width: 40, height: 40, marginRight: 10
@@ -425,6 +430,7 @@ const Home = ({ navigation }) => {
                             }} ></Image>
                             <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {category}</Text>
                             <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
+
 
 
                         </View>
@@ -444,6 +450,7 @@ const Home = ({ navigation }) => {
 
                     <View style={{ margin: 10, backgroundColor: 'white', elevation: 5, padding: 10 }}>
 
+
                         <Text style={{ alignItems: 'center', width: '100%', textAlign: 'center', marginBottom: 8, fontSize: 22, fontWeight: '600' }}>{title}</Text>
                         <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>{formatDate(date)}</Text>
                         <View style={{ fontWeight: 'bold', fontSize: 19, marginBottom: 5, marginTop: 5, flexDirection: 'row', alignContent: 'space-between' }}>
@@ -454,6 +461,7 @@ const Home = ({ navigation }) => {
                             }} ></Image>
                             <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {category}</Text>
                             <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
+
 
 
                         </View>

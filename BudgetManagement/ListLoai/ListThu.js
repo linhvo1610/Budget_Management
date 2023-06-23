@@ -8,7 +8,7 @@ import Home from '../Compoment/Home';
 
 const ListThu = (props) => {
     // var url = "https://63dc9b8a2308e3e319ea7194.mockapi.io/sanpham/listThu"
-    var url= "http://192.168.1.8:3000/tb_loaiThu";
+    var url= "http://192.168.0.104:3000/tb_loaiThu";
     const [listcontact, setlistcontact] = useState([])
     const [reloading, setreloading] = useState(false)
 
