@@ -17,6 +17,7 @@ import ListChi from './ListLoai/ListChi';
 import UpdateChi from './ListLoai/UpdateChi';
 import AddKhoanthu from './Compoment/AddKhoanthu';
 import Information from './Compoment/Information';
+import Chitiet from './Compoment/Chitiet';
 
 
 const Stack = createNativeStackNavigator();
@@ -42,8 +43,7 @@ export default function App() {
         <Stack.Screen name='ListChi' component={ListChi} options={{ title: 'Update loai chi' }} />
         <Stack.Screen name='AddKhoanthu' component={AddKhoanthu} options={{ title: 'Add khoan thu' }} />
         <Stack.Screen name='Information' component={Information} options={{ title: 'Information' }} />
-
-
+        <Stack.Screen name='Chitiet' component={Chitiet} options={{ title: 'Chitiet' }} />
       </Stack.Navigator>
     </NavigationContainer>
 
