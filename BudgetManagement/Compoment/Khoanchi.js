@@ -39,8 +39,8 @@ const Khoanchi = ({ navigation }) => {
 
     const [data, setdata] = useState([]);
     const [id, setid] = useState();
-    const [title, settitle] = useState();
-    const [description, setdescription] = useState();
+    const [title, settitle] = useState('');
+    const [description, setdescription] = useState('');
     const [price, setprice] = useState(0);
     const [username, setusername] = useState();
     const [userId, setuserId] = useState();
@@ -237,6 +237,7 @@ const Khoanchi = ({ navigation }) => {
             })
         })
     }
+   
 
     const addRecord = () => {
         //1. Chuẩn bị dữ liệu:
@@ -253,6 +254,10 @@ const Khoanchi = ({ navigation }) => {
 
         }
         //2. Gọi hàm fetch
+
+      
+           
+                
         fetch('http://192.168.0.103:8000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
@@ -273,8 +278,8 @@ const Khoanchi = ({ navigation }) => {
             .catch((err) => {  // catch để bắt lỗi ngoại lệ
                 console.log(err);
             });
+    
     }
-
     function UpdateRecord() {
         let item = {
             id: idrecord,
@@ -305,19 +310,51 @@ const Khoanchi = ({ navigation }) => {
         })
     }
     function handleUpdate() {
-        UpdateRecord();
-        getListrecord();
-        UpdateBalance();
+        if (title == 0) {
+            // thông báo:
+            alert("Chưa nhập tiêu đề")
+            return;
+        }
+        if (price == 0) {
+            alert("Vui lòng nhập số tiền")
+            return;
+        }
+        if (selectedValue == undefined) {
+            alert("Vui lòng chọn  loại chi tiêu")
+            return;
+        }else{
+            UpdateRecord();
+            getListrecord();
+            UpdateBalance();
+        }
+      
     }
     function handleAdd() {
-        addRecord();
-        getListrecord();
-        UpdateBalance();
-        setModalVisible(false);
-        settitle('');
-        setprice(0);
-        setdescription('');
+        if (title == 0) {
+            // thông báo:
+            alert("Chưa nhập tiêu đề")
+            return;
+        }
+        if (price == 0) {
+            alert("Vui lòng nhập số tiền")
+            return;
+        }
+        if (selectedValue == undefined) {
+            alert("Vui lòng chọn  loại chi tiêu")
+            return;
+        }
+        else {
+            addRecord();
+            getListrecord();
+            UpdateBalance();
+            setModalVisible(false);
+            settitle('');
+            setprice(0);
+            setdescription('');
+            setSelectedValue();
+        }
     }
+   
     renderItem = ({ item, index }) => {
 
 
@@ -598,7 +635,7 @@ const Khoanchi = ({ navigation }) => {
 
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Tiêu đề:</Text>
-                                <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)} required></TextInput>
+                                <TextInput style={styles.inputmodel} placeholder='Nhập tiêu đề' value={title} onChangeText={text => settitle(text)} ></TextInput>
                             </View>
                             <View style={{ width: '100%', alignContent: 'center', marginLeft: 180 }}>
                                 <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: 5 }}>Số Tiền:</Text>
