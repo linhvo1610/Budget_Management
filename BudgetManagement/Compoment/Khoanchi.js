@@ -38,8 +38,8 @@ const Khoanchi = (props) => {
 
     const [data, setdata] = useState([]);
     const [id, setid] = useState();
-    const [title, settitle] = useState();
-    const [description, setdescription] = useState();
+    const [title, settitle] = useState('');
+    const [description, setdescription] = useState('');
     const [price, setprice] = useState(0);
     const [username, setusername] = useState();
     const [userId, setuserId] = useState();
@@ -60,7 +60,7 @@ const Khoanchi = (props) => {
     const [idrecord, setidrecord] = useState();
 
 
-    console.log(date);
+    console.log('selected value', selectedValue);
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
@@ -160,6 +160,7 @@ const Khoanchi = (props) => {
 
         }
     }
+
     const getcategory = () => {
         fetch(API.getcategory)
             .then(res => res.json())
@@ -274,7 +275,6 @@ const Khoanchi = (props) => {
         let item = {
             id: idrecord,
             title: title,
-
             description: description,
             id_cat: selectedValue,
             id_user: userId,
@@ -304,15 +304,32 @@ const Khoanchi = (props) => {
         getListrecord();
         UpdateBalance();
     }
-    function handleAdd() {
-        addRecord();
-        getListrecord();
-        UpdateBalance();
-        setModalVisible(false);
-        settitle('');
-        setprice(0);
-        setdescription('');
+    const handlevalidate = () => {
+        if (title.length == 0) {
+            // thông báo:
+            alert("Chưa nhập tiêu đề")
+            return;
+        }
+        if (price == 0) {
+            alert("Vui lòng nhập số tiền")
+            return;
+        }
+        if (selectedValue == undefined) {
+            alert("Vui lòng chọn  loại chi tiêu")
+            return;
+        }
+        else {
+            addRecord();
+            getListrecord();
+            UpdateBalance();
+            setModalVisible(false);
+            settitle('');
+            setprice(0);
+            setdescription('');
+            setSelectedValue();
+        }
     }
+
     renderItem = ({ item, index }) => {
 
 
@@ -338,6 +355,7 @@ const Khoanchi = (props) => {
                     if (response.status == 200)
                         alert("Xóa thành công");
 
+
                 })
                 .catch((err) => {  // catch để bắt lỗi ngoại lệ
                     console.log(err);
@@ -359,6 +377,7 @@ const Khoanchi = (props) => {
                 body: JSON.stringify(obj)
             }).then((result) => {
                 result.json().then((resp) => {
+
                     console.warn(resp)
                 })
             })
@@ -657,12 +676,12 @@ const Khoanchi = (props) => {
                                 </Pressable>
                                 {isChecked == true ? <Pressable
                                     style={[styles.button, styles.buttonClose]}
-                                    onPress={() => handleAdd()}
+                                    onPress={() => handlevalidate()}
                                 >
                                     <Text style={styles.textStyle}>Thêm Giao Dịch Chi</Text>
                                 </Pressable> : <Pressable
                                     style={[styles.button, styles.buttonClose]}
-                                    onPress={() => handleAdd()}
+                                    onPress={() => handlevalidate()}
                                 >
                                     <Text style={styles.textStyle}>Thêm Giao Dịch Thu</Text>
                                 </Pressable>}
@@ -907,4 +926,7 @@ const styles = StyleSheet.create({
     inputmodel: {
         borderWidth: 1, height: 40, borderRadius: 5, marginBottom: 10, width: '60%', padding: 8
     }
+
 });
+
+

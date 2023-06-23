@@ -22,7 +22,7 @@ const Sysmodel = ({message,visible,onHide,ondangx}) => {
                                                 <Text style={{fontSize:17,textAlign:'center',marginTop:6,color:'blue'}} >Hủy</Text>
                                                 </TouchableOpacity>
                                                 <View style={{width:120}}>
-                                                <TouchableOpacity style={{width:'100%',height:40,borderRadius:0,borderLeftWidth:0.25,borderTopWidth:0.5}}
+                                                <TouchableOpacity style={{width:'100%',height:40,borderRadius:0,borderLeftWidth:0.5,borderTopWidth:0.5}}
                                                 onPress={ondangx}>
                                                 <Text style={{fontSize:17,textAlign:'center',marginTop:6,color:'red'}} >Đăng xuất</Text>
                                                 </TouchableOpacity>

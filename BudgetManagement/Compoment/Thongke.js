@@ -165,7 +165,7 @@ const ThongKe = ({ navigation }) => {
         }
     }
     const getcategory = () => {
-        fetch('http://192.168.1.8:8000/api/category')
+        fetch('http://192.168.0.104:8000/api/category')
             .then(res => res.json())
             .then(result => {
                 console.log(result);
@@ -501,8 +501,7 @@ const ThongKe = ({ navigation }) => {
     return (
 
         <SafeAreaView style={{flex: 1}}>
-            
-            <Text style={{marginBottom:5,backgroundColor:'white'}}>Thống kê</Text>
+        
             <TopNav ></TopNav>
         </SafeAreaView>
 
