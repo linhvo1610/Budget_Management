@@ -575,7 +575,7 @@ const CurrentMonth = () => {
             <View style={{alignContent:'flex-start',justifyContent:'flex-start',marginTop:10}}>
                 <Text style={{color:'grey',marginLeft:5,fontWeight:'600'}}>Tất cả giao dịch trong tháng</Text>
             </View>
-            <View style={{ width: "100%", height: 600 }}>
+            <View style={{ width: "100%", height: 650 }}>
                 {isLoading ? <ActivityIndicator /> : (<FlatList refreshControl={
                     <RefreshControl refreshing={reloading}
                         onRefresh={reloadData} />}

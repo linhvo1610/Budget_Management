@@ -64,13 +64,10 @@ const Login = (props) => {
                 <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 15, fontStyle: 'italic', }}>Welcome back</Text>
             </View>
            
-            <View style={{ marginTop: 50, alignItems: 'center', }}>
-                <Text style={{ color: '#ffa500', fontSize: 25, }}>Spending Management</Text>
-            </View>
             <View style={{ marginTop: 30, alignItems: 'center', }}>
             <Image
-          style={{width:100,height:100, margin:15,}}
-          source={ require('../assets/unnamed.png')
+          style={{width:350,height:280, margin:15,}}
+          source={ require('../assets/logo.png')
            
           }
           
@@ -78,7 +75,7 @@ const Login = (props) => {
             
             </View>
 
-            <View style={{ marginTop: 50, alignItems: 'center', }}>
+            <View style={{ marginTop: 20, alignItems: 'center', }}>
                 <TextInput style={styles.Textinput} placeholder='Username' placeholderTextColor='white' value={username} onChangeText={text => setusername(text)}></TextInput>
                 <TextInput style={styles.Textinput} placeholder='Password' placeholderTextColor='white' textContentType="password" value={password} onChangeText={text => setpassword(text)}
                     secureTextEntry={true}></TextInput>
@@ -95,7 +92,8 @@ const Login = (props) => {
             <View style={{ marginTop: 15, alignItems: 'center',flex:1,alignItems:'center' }}>
 
                 <TouchableHighlight style={{ marginTop: 20, marginBottom: 10, width: '100%' }}>
-                    <View style={{alignContent:'center',textAlign: 'center', fontWeight: 'bold',flexDirection:'row'}} >
+                    <View style={{alignContent:'center',textAlign: 'center', fontWeight: 'bold',flexDirection:'row', justifyContent: 'center',
+                    alignItems: 'center',}} >
                         <Text style={{marginRight:5}}>You don't have an account?  </Text>
                         <Text style={{ color: '#ff8c00' }} onPress={() => props.navigation.navigate("Res")} >Sign-up</Text>
 
@@ -118,7 +116,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
 
 
-    }
+    },
+
 })
 
 export default Login;

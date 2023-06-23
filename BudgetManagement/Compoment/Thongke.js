@@ -256,7 +256,7 @@ const ThongKe = ({ navigation }) => {
 
         }
         //2. Gọi hàm fetch
-        fetch('http://192.168.0.104:8000/api/record', {
+        fetch('http://192.168.1.8:8000/api/record', {
             method: 'POST', // POST: Thêm mới, PUT: Sửa, DELETE: xóa, GET: lấy thông tin
             headers: { // Định dạng dữ liệu gửi đi
                 Accept: 'application/json',
@@ -501,8 +501,7 @@ const ThongKe = ({ navigation }) => {
     return (
 
         <SafeAreaView style={{flex: 1}}>
-            
-            <Text style={{marginBottom:5,backgroundColor:'white'}}>Thống kê</Text>
+        
             <TopNav ></TopNav>
         </SafeAreaView>
 

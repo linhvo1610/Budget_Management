@@ -218,6 +218,12 @@ const Home = ({ navigation }) => {
         getBalance()
 
     }
+    function handlS (){
+        addBalance()
+        setupdateModalVisible(false);
+        getBalance()
+
+    }
 
     renderItem = ({ item, index }) => {
 
@@ -311,7 +317,7 @@ const Home = ({ navigation }) => {
                                 <Image style={{
                                     width: 40, height: 40, marginRight: 10
                                 }} source={{
-                                    uri: "http://192.168.0.103:8000" + item.id_cat.image,
+                                    uri: "http://192.168.1.8:8000" + item.id_cat.image,
                                 }} ></Image>
                                 <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                                 <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
@@ -340,7 +346,7 @@ const Home = ({ navigation }) => {
                                 <Image style={{
                                     width: 40, height: 40, marginRight: 10
                                 }} source={{
-                                    uri: "http://192.168.0.103:8000" + item.id_cat.image,
+                                    uri: "http://192.168.1.8:8000" + item.id_cat.image,
                                 }} ></Image>
                                 <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {item.id_cat.name}</Text>
                                 <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {item.price} ₫</Text>
@@ -406,7 +412,7 @@ const Home = ({ navigation }) => {
                     <Text style={{ flex: 1, fontSize: 16, lineHeight: 30, color: 'green', textAlign: 'right', fontWeight: 'bold' }}>Xem tất cả giao dịch</Text>
                 </TouchableOpacity>
             </View>
-
+            {typeof data!= "undefined" ? 
             <ScrollView>
                 {is_expense == false ?
 
@@ -422,7 +428,7 @@ const Home = ({ navigation }) => {
                                 <Image style={{
                                     width: 40, height: 40, marginRight: 10
                                 }} source={{
-                                    uri: "http://192.168.0.103:8000" + image,
+                                    uri: "http://192.168.1.8:8000" + image,
                                 }} ></Image>
                                 <Text style={{ marginBottom: 5, flex: 6, fontSize: 18, fontWeight: '500', marginTop: 3 }} > {category}</Text>
                                 <Text style={{ marginBottom: 5, color: 'green', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
@@ -451,7 +457,7 @@ const Home = ({ navigation }) => {
                                 <Image style={{
                                     width: 40, height: 40, marginRight: 10
                                 }} source={{
-                                    uri: "http://192.168.0.103:8000" + image,
+                                    uri: "http://192.168.1.8:8000" + image,
                                 }} ></Image>
                                 <Text style={{ marginBottom: 5, flex: 6, fontSize: 20, fontWeight: '500', marginTop: 3 }} > {category}</Text>
                                 <Text style={{ marginBottom: 5, color: 'red', flex: 2, fontSize: 18, marginTop: 3 }} >    {price} ₫</Text>
@@ -466,6 +472,7 @@ const Home = ({ navigation }) => {
 
 
             </ScrollView>
+            : null}
             <View>
 
             </View>
@@ -482,10 +489,10 @@ const Home = ({ navigation }) => {
                 }}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <TextInput placeholder="Nhập số dư" placeholderTextColor='black' value={addbalance} onChangeText={text => setaddbalance(text)}></TextInput>
+                        <TextInput placeholder="Nhập số dư" placeholderTextColor='black' value={addbalance.toString()} onChangeText={text => setaddbalance(text)}></TextInput>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => addBalance()}>
+                            onPress={() => handlS()}>
                             <Text style={styles.textStyle}>Add</Text>
                         </Pressable>
                     </View>
@@ -501,7 +508,7 @@ const Home = ({ navigation }) => {
                 }}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <TextInput placeholder="Cập nhật số dư" placeholderTextColor='black' value={newbalance} onChangeText={text => setnewbalance(text)}></TextInput>
+                        <TextInput placeholder="Cập nhật số dư" placeholderTextColor='black' value={newbalance.toString()} onChangeText={text => setnewbalance(text)}></TextInput>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => handleupdatebalance()}>
@@ -603,11 +610,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+        width:'50%'
+
     },
     button: {
         borderRadius: 20,
         padding: 10,
         elevation: 2,
+        marginTop:20
     },
     buttonOpen: {
         backgroundColor: '#F194FF',
